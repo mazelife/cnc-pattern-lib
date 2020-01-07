@@ -1,0 +1,8 @@
+.stack-work/
+cnc-pattern-lib.cabal
+*~
+*.iml
+*.svg
+*.lock
+.DS_Store
+.idea/

@@ -2,8 +2,10 @@ module Group where
 
 import Control.Monad (sequence_)
 import Data.List (groupBy, sort)
+import System.IO (hPutStrLn, stderr)
 import Text.Blaze  (stringComment)
 import Text.Blaze.Svg11 (Svg, g)
+import Text.Printf (printf)
 
 import ApproxEq
 import Layer (Layer, pack)
@@ -28,7 +30,11 @@ data Group shape = Group { name   :: !String    -- ^ Name of the group
 
 -- | Groups can be combined.
 instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Semigroup (Group a) where
-    (<>) (Group an as) (Group bn bs) = Group (an ++ bn) (as ++ bs)
+    (<>) (Group an as) (Group bn bs) 
+        | an == bn  = Group an (as ++ bs)
+        | otherwise = Group (an ++ bn) (as ++ bs)
+
+    
 
 -- | There exists an identify element for any group.
 instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Monoid (Group a) where
@@ -81,6 +87,14 @@ transformAndAppend fn grp = grp <> (Group "" newShapes)
 optimizeGroup :: (S.Mergable a) => Group a -> Float -> Group a
 optimizeGroup (Group n s) epsilon = Group n (S.optimize s epsilon)
 
+
+optimizeGroupAndLog :: (S.Mergable a) => Group a -> Float -> IO (Group a)
+optimizeGroupAndLog grp epsilon = (hPutStrLn stderr mssg) >> (return optGrp)
+    where 
+        _start = length $ shapes grp
+        optGrp = optimizeGroup grp epsilon 
+        _end   = length $ shapes optGrp
+        mssg   = printf "Optimized group \"%s\": %d shapes to %d" (name grp) _start _end
 
 
 

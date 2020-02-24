@@ -9,14 +9,15 @@ import qualified Data.Map.Lazy as Map
 import System.Exit (die)
 
 import Scene (Scene)
-import qualified Scenes.HuffmanTowerOptimized as HTO (getScene)
+
 import qualified Scenes.HuffmanTower as HT (getScene)
+import qualified Scenes.Resch as R (getScene)
 
 
 scenes :: Map.Map String (IO Scene)
 scenes = Map.fromList 
     [ ("huffman-tower", HT.getScene)
-    , ("huffman-tower-optimized", HTO.getScene)]
+    , ("resch", R.getScene)]
 
 
 getSceneOrExit :: String -> IO Scene

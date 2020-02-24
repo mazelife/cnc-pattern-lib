@@ -1,7 +1,8 @@
 module Scenes.HuffmanTower (getScene) where
 
 import Arc (pattern Arc)
-import Layer ((+:), (<+>), rotate, mirror, translateP)
+import Layer ((+:))
+import qualified Group as G
 import Line (pattern Line)
 import Point (pattern Point)
 import Rectangle (mkRectangle)
@@ -18,12 +19,19 @@ white = "#ffffff"
 --}
 
 
-
 getScene :: IO Scene
-getScene = return ((createScene "huffman_tower" 8 3 layerStyle) `addElement` final)
+getScene = do
+    let allArcs = mconcat $ map (\p -> G.translateP baseArcs p) ps
+    let allLines = mconcat $ map (\p -> G.translateP baseLines p) ps
+    optLines <- G.optimizeGroupAndLog allLines 0.1
+    let final = framingRect +: G.toLayer allArcs ++ G.toLayer optLines
+    pure (createScene "huffman_tower" 8 3 layerStyle `addElement` final)
   where
+    layerStyle = StyleAttrs { strokeColor=Just "#03161d"
+                            , strokeWidth=Just 0.05
+                            , fillColor=Nothing }   
     len = 1.0
-    hgt = len * (sqrt 3) / 2
+    hgt = len * sqrt 3 / 2
     segments = 7.0
 
     topLeft = Point ((-segments) * len / 2) (1.5 * hgt)
@@ -34,21 +42,22 @@ getScene = return ((createScene "huffman_tower" 8 3 layerStyle) `addElement` fin
     a1 = Arc c1 len (2 * pi / 3) pi
     c2 = c1 * 0.5
     a2 = Arc c2 (0.25 * len) (pi / 2) pi
+    ag0 = G.Group "arcs" [a1, a2]
+    ag1 = G.rotate ag0 (c2 * 0.5) pi
+    ag2 = G.mirror (ag0 <> ag1) c2 (Point 0 1)
+    baseArcs = ag0 <> ag1 <> ag2
+
     l1 = Line (Point 0 hgt) (Point (0.52 * len) hgt)
     l2 = Line (Point (0.5 * len) (hgt * 0.97)) (Point (0.5 * len) (1.5 * hgt))
-    
-    v0 = l1 +: l2 +: a2 <+> a1
-    v1 = rotate v0 (c2 * 0.5) pi
-    v2 = mirror (v0 ++ v1) c2 (Point 0 1)
-    baseForm = v1 ++ v2 ++ v0
-    
+    lg0 = G.Group "lines" [l1, l2]  
+    lg1 = G.rotate lg0 (c2 * 0.5) pi
+    lg2 = G.mirror (lg0 <> lg1) c2 (Point 0 1)
+    baseLines = lg0 <> lg1 <> lg2
+   
     start = (-segments) / 2.0
     ts = [start, (start + 1.0) .. start + segments - 1]
     ps = map (\x -> Point x 0) ts
-    final = framingRect +: (concat $ map (\p -> translateP baseForm p) ps)
-    layerStyle = StyleAttrs { strokeColor=(Just "#03161d")
-                            , strokeWidth=(Just 0.05) 
-                            , fillColor=Nothing }
+
 
 
 

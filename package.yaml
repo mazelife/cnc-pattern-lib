@@ -3,12 +3,12 @@ version:             0.1.0.0
 github:              "mazelife/cnc-pattern-lib"
 license:             BSD3
 author:              "James Stevenson"
-maintainer:          "james.m.stevenson@gmail.com"
+maintainer:          "james.m.stevenson (λ) gmail (dot) com"
 copyright:           "James Stevenson"
 
 extra-source-files:
 - README.rst
-- ChangeLog.md
+- .hlint.yaml
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package

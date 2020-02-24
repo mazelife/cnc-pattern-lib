@@ -31,10 +31,28 @@ instance Num Point where
     negate (Point x y) = Point (x * (-1)) (y * (-1))
     fromInteger i = Point (fromInteger i) (fromInteger i)
 
+
 instance Fractional Point where
     Point x1 y1 / Point x2 y2 = Point (x1 / x2) (y1 / y2)
     recip (Point x y) = Point y x
     fromRational r = Point (fromRational r) (fromRational r)    
+
+
+instance Floating Point where
+    pi = Point pi pi
+    exp (Point x y) = Point (exp x) (exp y)
+    log (Point x y) = Point (log x) (log y)
+    sin (Point x y) = Point (sin x) (sin y)
+    cos (Point x y) = Point (cos x) (cos y)
+    asin (Point x y) = Point (asin x) (asin y)
+    acos (Point x y) = Point (acos x) (acos y)
+    atan (Point x y) = Point (atan x) (atan y)
+    sinh (Point x y) = Point (sinh x) (sinh y)
+    cosh (Point x y) = Point (cosh x) (cosh y)
+    asinh (Point x y) = Point (asinh x) (asinh y)
+    acosh (Point x y) = Point (acosh x) (acosh y)
+    atanh (Point x y) = Point (atanh x) (atanh y)
+
 
 instance ApproxEq Point where
     approxEqual a b epsilon = let Point dx dy = abs (a - b) in

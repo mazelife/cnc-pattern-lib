@@ -126,7 +126,7 @@ A list of shapes can also be merged like so: ``optimize [lineA, lineB]``, which 
 Groups, Layers, and Scenes
 --------------------------
 
-You can organize sets of shapes using a ``Group`` or a ``Layer``. Shapes, groups, and layers can all be stored in a ``Scene``, which is equivalent to a Single SVG file. Scenes have a height, a width (both measured in pixel units) and a style.
+You can organize sets of shapes using a ``Group`` or a ``Layer``. Shapes, groups, and layers can all be stored in a ``Scene``, which is equivalent to a Single SVG file. Scenes have a height, a width (both measured in inches) and a style.
 
 Let's see an example of these concepts at work::
 
@@ -135,11 +135,11 @@ Let's see an example of these concepts at work::
 
 	circle = Circle (Point 0 0) 1
 
-We've created a circle at the center of our canvas with a radius of 1. Now let's create a set of circles based on transformations of the original::
+We've created a circle at the center of our canvas with a radius of 1 inches. Now let's create a set of circles based on transformations of the original::
 
-	circleList = [circle, (translate circle 10), (translate circle -5)]
+	circleList  = [circle, translateP circle (Point 1 0), translateP circle (Point (-1) 0)]
 
-Our ``circleList`` has the original circle, a circle moved up and to the right by 10, and a circle moved down and to the left by 5. Now let's put those circles in a group::
+Our ``circleList`` has the original circle, a circle moved to the right by 1, and a circle to the left by 1. Now let's put those circles in a group::
 
 
 	import Group
@@ -151,10 +151,10 @@ Groups can be given a "name" that can be helpful for debugging purposes. The ``G
 
 We can apply transformations to groups too::
 
-	moreCircles = rotate circles (Point 0 0) 2
+	moreCircles = rotate circles (Point 0 0) (-1.55)
 
 
-This will create a new group that is a rotation of our original group of circles about a line through point (0,0) along vector 2. We can also combine groups::
+This will create a new group that is a rotation of our original group of circles about a line through point (0,0) along vector -1.55. We can also combine groups::
 
 	allCircles = circles <> moreCircles
 
@@ -168,7 +168,7 @@ This differs from the previous group in that it will remove any duplicate circle
 #. For *lines* duplicates are removed, but non-duplicate lines can also be combined: Two line segments will be merged if their points are collinear and if one line segment contains at least one of the endpoints of the other.
 #. For *arcs* duplicates are removed, but non-duplicate lines can also be combined: Two arcs will be merged if they have the same center point, radius, and if one arc contains at least one of the endpoints of the other.
 
-Applying repeated transformations to groups can sometimes result in duplicate shapes that cause wasted effort by CNC milling equipment (why re-inscribe the same shape multiple times?) so optimization is always a good idea. 
+Applying repeated transformations to groups can sometimes result in duplicate shapes that cause wasted effort by CNC milling equipment (why re-inscribe the same shape multiple times?) so optimization is always a good idea. This example is a case in point. We have a line of three circles with a center point at 0,0. We create a rotated group around point 0,0, meaning that this new group will duplicate one of the circles in the original group.
 
 We can also convert a group to an SVG object::
 
@@ -178,9 +178,9 @@ In other words, groups are part of the same three typeclasses that shape primiti
 
 Finally let's create a different shape, a square that contains our original circle::
 
-	import Square
+	import Rectangle
 	
-	square = mkSquare (Point 1 1) (Point (-1) (-1))
+	square = mkRectangle (Point 1.5 1.5) (Point (-1.5) (-1.5))
 
 At some point we may wish to store our circles and our square in some kind of single container. Groups won't work for this because a group can only contain one kind of shape and we have two. This is where layers come in:
 
@@ -201,7 +201,9 @@ Lastly, let's create a scene with our shapes::
 	emptyScene = Scene {name="my scene", width=8, height=8, style=defaultStyleAttrs, elements=[]}
 	scene = addElement addElement layer
 
-You can see the full version of this scene in the ``Scenes`` submodule. 
+You can see the full version of this scene in the ``Scenes`` submodule as ``Scenes.Simple``. It looks like this when rendered:
+
+.. image:: examples/simple.png
 
 
 [1] Why can't we merge a layer? Or transform it? Layers represent a heterogeneous collection of types, which are implemented here using Haskell's `existential types <https://wiki.haskell.org/Existential_type>`_. Existential types pack up a value with operations on that value, and hide the actual value's types. What this means is we can't specialize a type once we've packed it up in a type (here called ``ShapeLike``).

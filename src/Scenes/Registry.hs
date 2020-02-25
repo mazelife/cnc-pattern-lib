@@ -12,12 +12,14 @@ import Scene (Scene)
 
 import qualified Scenes.HuffmanTower as HT (getScene)
 import qualified Scenes.Resch as R (getScene)
+import qualified Scenes.Simple as S (getScene)
 
 
 scenes :: Map.Map String (IO Scene)
 scenes = Map.fromList 
     [ ("huffman-tower", HT.getScene)
-    , ("resch", R.getScene)]
+    , ("resch", R.getScene)
+    , ("simple", S.getScene)]
 
 
 getSceneOrExit :: String -> IO Scene

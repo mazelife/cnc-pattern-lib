@@ -1,6 +1,6 @@
 module Rectangle where
 
-import Control.Monad (sequence_)
+import Control.Monad (mapM_)
 import Data.List (all)
 
 import Text.Blaze.Svg11 (g)
@@ -35,7 +35,7 @@ mapPoints f (Rectangle tl tr br bl) =
 
 
 instance SvgShape Rectangle where
-    toSvg r = g $ sequence_ (map toSvg $ asLines r)
+    toSvg r = g $ mapM_ toSvg $ asLines r
 
 
 instance ApproxEq Rectangle where

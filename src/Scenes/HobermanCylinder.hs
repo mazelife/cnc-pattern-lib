@@ -1,8 +1,8 @@
 module Scenes.HobermanCylinder (getScene) where
 
-import Group (Group, pattern Group, optimizeGroupAndLog, toLayer)
+import Group (pattern Group, optimizeGroupAndLog, toLayer)
 import Line
-import Point (Point, pattern Point, cartesianProduct, fromFloat, xVal)
+import Point (pattern Point, cartesianProduct, fromFloat, xVal)
 import Scene
 import Shape
 import Style
@@ -28,8 +28,8 @@ getScene = do
     o = Point 0 0
 
     p1 = x * w
-    p2 = x * h / (tan th1) + h * y
-    p3 = p1 + x * h / tan(th2) + y * h
+    p2 = x * h / tan th1 + h * y
+    p3 = p1 + x * h / tan th2 + y * h
 
     l1 = Line o p1
     l2 = Line o p2
@@ -44,7 +44,7 @@ getScene = do
     l11 = Line (p3 - p2 + p1) (p3 + p1) 
 
     base = Group [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11]
-    t0 = base <> (mirror base p2 (Point 1 0))
+    t0 = base <> mirror base p2 (Point 1 0)
     
     tot_w = 1.5 + xVal (p3 - p2 + p1)
     xs = map (\n -> n * tot_w - 0.5 * nx * tot_w) [0..3]

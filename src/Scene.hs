@@ -41,7 +41,7 @@ data Scene = Scene { width       :: Float
 
 
 instance Show Scene where
-  show scene = "Scene{width=" ++ (show $ width scene) ++ " height=" ++ (show $ height scene) ++ "}"
+  show scene = "Scene{width=" ++ show (width scene) ++ " height=" ++ show (height scene) ++ "}"
 
 mkScene :: Float -> Float -> [Layer] -> Scene
 mkScene w h layers = let svgElements = map toSvg layers in
@@ -57,28 +57,28 @@ instance SvgShape Scene where
     S.docTypeSvg ! A.version "1.1" 
                  ! A.width (widthAttr scene) 
                  ! A.height (heightAttr scene)  
-                 ! A.viewbox (viewBox scene) $ do
-      applyAttrs parentGroupAttrs (S.g $ do sequence_ (elements scene))
+                 ! A.viewbox (viewBox scene) $
+      applyAttrs parentGroupAttrs (S.g $ sequence_ (elements scene))
     where
-      parentGroupAttrs = (A.transform $ transform scene) : (getAttrs $ style scene)
+      parentGroupAttrs = A.transform (transform scene) : getAttrs (style scene)
 
 
 widthAttr :: Scene -> S.AttributeValue
-widthAttr s = S.stringValue $ (roundToStr 2 (width s)) ++ "in"
+widthAttr s = S.stringValue $ roundToStr 2 (width s) ++ "in"
 
 heightAttr :: Scene -> S.AttributeValue
-heightAttr s = S.stringValue $ (roundToStr 2 (height s)) ++ "in"
+heightAttr s = S.stringValue $ roundToStr 2 (height s) ++ "in"
 
 viewBox :: Scene -> S.AttributeValue
-viewBox scene = S.stringValue $ "0 0 " ++ (roundToStr 4 $ width scene) ++ " " ++ (roundToStr 4 $ height scene)
+viewBox scene = S.stringValue $ "0 0 " ++ roundToStr 4 (width scene) ++ " " ++ roundToStr 4 (height scene)
 
 transform :: Scene -> S.AttributeValue
-transform scene = S.stringValue $ printf "translate(%s,%s) scale(1, -1)" (roundToStr 4 $ (width scene) * 0.5) (roundToStr 4 $ (height scene) * 0.5)
+transform scene = S.stringValue $ printf "translate(%s,%s) scale(1, -1)" (roundToStr 4 $ width scene * 0.5) (roundToStr 4 $ height scene * 0.5)
 
 
 svgDoc :: Scene -> S.Svg ->  S.Svg
-svgDoc scene core = S.docTypeSvg ! A.version "1.1" ! A.width (widthAttr scene) ! A.height (heightAttr scene)  ! A.viewbox (viewBox scene) $ do
-    S.g ! A.transform (transform scene) ! A.fill (S.stringValue "#ffffff") $ do core
+svgDoc scene core = S.docTypeSvg ! A.version "1.1" ! A.width (widthAttr scene) ! A.height (heightAttr scene)  ! A.viewbox (viewBox scene) $
+    S.g ! A.transform (transform scene) ! A.fill (S.stringValue "#ffffff") $ core
 
 
 emptyScene :: Float -> Float -> StyleAttrs -> Scene
@@ -87,10 +87,8 @@ emptyScene w h s = Scene w h s []
 
 addElement :: (SvgShape s) => Scene -> s -> Scene
 addElement scene s = scene { elements=els }
-  where els = toSvg s : (elements scene)
+  where els = toSvg s : elements scene
 
 
 renderScene :: IO Scene -> IO String
-renderScene sceneM = do 
-  scene <- sceneM 
-  return (renderSvg $ toSvg scene)
+renderScene sceneM = renderSvg . toSvg <$> sceneM

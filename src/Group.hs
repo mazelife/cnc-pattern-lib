@@ -8,7 +8,6 @@ import Text.Printf (printf)
 
 import ApproxEq
 import Layer (Layer, mkLayer)
-import qualified Point as P
 import qualified Shape as S
 import Style
 

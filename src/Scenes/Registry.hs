@@ -6,6 +6,7 @@ module Scenes.Registry
 
 import Data.List (intercalate)
 import qualified Data.Map.Lazy as Map
+import Data.Maybe (fromMaybe)
 import System.Exit (die)
 
 import Scene (Scene)
@@ -26,9 +27,10 @@ scenes = Map.fromList
 
 
 getSceneOrExit :: String -> IO Scene
-getSceneOrExit sceneName = case Map.lookup sceneName scenes of
-    Just s  -> s
-    Nothing -> die ("Scene with the name \"" ++ sceneName ++ "\" does not exist.")
+getSceneOrExit sceneName =  fromMaybe
+    (die
+       ("Scene with the name \"" ++ sceneName ++ "\" does not exist."))
+    (Map.lookup sceneName scenes)
 
 scenesLabel :: String
 scenesLabel = intercalate ", " (Map.keys scenes)

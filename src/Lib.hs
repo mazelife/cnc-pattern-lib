@@ -22,7 +22,7 @@ render = execParser opts >>= outputScene
 
 outputScene :: RenderOpts -> IO ()
 outputScene opts = do
-    hPutStrLn stderr $ "Rendering scene \"" ++ (scene opts) ++ "\"..."
+    hPutStrLn stderr $ "Rendering scene \"" ++ scene opts ++ "\"..."
     svgStr <- renderScene $ getSceneOrExit (scene opts)
     putStrLn svgStr
 

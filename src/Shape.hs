@@ -47,7 +47,7 @@ class Mergable s where
     
     -- Merge all shapes in a given list that can be merged
     optimize :: [s] -> Float -> [s]
-    optimize ms epsilon = optimize' ms [] epsilon
+    optimize ms = optimize' ms []
 
 
 -- | Recursively merge all items in a list--if possible--returning the

@@ -15,7 +15,7 @@ import Style
 getScene :: IO Scene
 getScene = do
     optGrp <- G.optimizeGroupAndLog final 0.1
-    let triangles = (G.toLayer "layer1" optGrp) { style = Just(layerStyle) }
+    let triangles = (G.toLayer "layer1" optGrp) { style = Just layerStyle }
     pure $ Scene (3 * (m + 0.5) * l) (sqrt 3 * (n + 1) * l) layerStyle [toSvg $ frame <> triangles]
   where
     l = 0.5  -- triangle circumradius

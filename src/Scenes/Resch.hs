@@ -38,7 +38,7 @@ getScene = do
     -- Create a triangle from our three points.
     baseTriangle = Group [ Line p0 p1, Line p1 p2, Line p0 p2]
     -- Create a group from the base triangle rotated three times.
-    rotationalVerticies = (map (\r -> 2 * pi * r / 3 ) [0..2])
+    rotationalVerticies = map (\r -> 2 * pi * r / 3 ) [0..2]
     t0 = mconcat $ map (\t -> rotate baseTriangle (Point 0 0) t) rotationalVerticies
     -- Mirror this group twice.
     t1 = t0 <> mirror t0 p0 (p1 - p0)
@@ -53,5 +53,5 @@ getScene = do
 
   -- Create a framing rectangle around the group.
     topLeft = Point ((-1.5 * m - 0.25) * l) (0.5 * sqrt 3 * (n + 0.5) * l)
-    bottomRight = Point ((1.5 * m - 0.25) * l) (-0.5 * sqrt(3) * (n + 0.5) * l)
+    bottomRight = Point ((1.5 * m - 0.25) * l) (-0.5 * sqrt 3 * (n + 0.5) * l)
     frame = mkLayer "frame" [mkRectangle topLeft bottomRight]

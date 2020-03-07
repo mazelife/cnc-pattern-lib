@@ -21,7 +21,7 @@ module Layer
     , mirror
     , offset ) where
 
-import Control.Monad (sequence_)
+import Control.Monad (mapM_)
 
 import Text.Blaze (stringComment)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
@@ -62,7 +62,7 @@ instance S.Transformable ShapeLike where
     offset (MkShape a) d leftSide         = pack $ S.offset a d leftSide
 
 instance S.SvgShape [ShapeLike] where
-    toSvg layer = g $ sequence_ (map S.toSvg layer)
+    toSvg layer = g $ mapM_ S.toSvg layer
 
 -- | A layer is just a sequence of shape-like things with a name and style
 data Layer = Layer { name   :: !String

@@ -144,17 +144,17 @@ Our ``circleList`` has the original circle, a circle moved to the right by 1, an
 
 	import Group
 
-	circles = Group "my three circles" circleList
+	circles = Group circleList
 
 
-Groups can be given a "name" that can be helpful for debugging purposes. The ``Group`` type is the functional equivalent of the ``<g>`` `container type <https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g>`_ in the SVG spec. When rendered, the group name will be rendered as a comment inside the group. 
+The ``Group`` type is the functional equivalent of the ``<g>`` `container type <https://developer.mozilla.org/en-US/docs/Web/SVG/Element/g>`_ in the SVG spec, and will be rendered as such.
 
 We can apply transformations to groups too::
 
 	moreCircles = rotate circles (Point 0 0) (-1.55)
 
 
-This will create a new group that is a rotation of our original group of circles about a line through point (0,0) along vector -1.55. We can also combine groups::
+This will create a new group that is a rotation of our original group of circles about a line through point (0,0) along vector -1.55. We can also combine groups (since ``Group`` implements ``Semigroup`` and ``Monoid``)::
 
 	allCircles = circles <> moreCircles
 
@@ -186,9 +186,9 @@ At some point we may wish to store our circles and our square in some kind of si
 
 	import Layer
 
-	layer = square +: (toLayer allCircles) 
+	layer = square +: (toLayer "circles" allCircles) 
 
-We're using the ``+:`` Layer combinator, which is the same as Haskell's ``cons`` operator (``:``) for lists. Our ``layer`` contains our square and six circles. Layers also belong to the ``SvgShape`` typeclass, meaning we can do ``toSvg layer``. But they don't belong to the ``Transformable`` or ``Mergable`` typeclass [1]. Layers do provide one useful feature which is that we can apply a uniform style to them:
+Note that layers must be given a name (which is rendered as a comment in the SVG file and can be helpful for debugging). We're using the ``+:`` Layer combinator, which is the same as Haskell's ``cons`` operator (``:``) for lists. Our ``layer`` contains our square and six circles. Layers also belong to the ``SvgShape`` typeclass, meaning we can do ``toSvg layer``. But they don't belong to the ``Transformable`` or ``Mergable`` typeclass [1]. Layers do provide one useful feature which is that we can apply a uniform style to them:
 
 	styledLayer = withStyle layer Style {strokeColor="red", strokeWidth=2, fillColor="green"}
 

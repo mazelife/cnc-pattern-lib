@@ -130,8 +130,8 @@ containsPoint p (Line s e) = isOnLine && p <= lineMax && p >= lineMin
 overlappingSegments :: Line -> Line -> Bool
 overlappingSegments a b =  sameSlope && (overlappingEnpoint || completelyContained)
   where
-    sameSlope           = (slope a) == (slope b)
-    overlappingEnpoint  = (containsPoint (start b) a) || (containsPoint (end b) a)
+    sameSlope           = slope a == slope b
+    overlappingEnpoint  = containsPoint (start b) a || containsPoint (end b) a
     completelyContained = containsPoint (start a) b
 
 

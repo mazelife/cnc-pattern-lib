@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.1//EN'
+  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg height="5.00in" version="1.1" viewBox="0 0 5.0000 5.0000" width="5.00in" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<g fill="none" stroke="#121c5b" stroke-width="0.0500" transform="translate(2.5000,2.5000) scale(1, -1)">
+		<g>
+			<!-- layer: layer-1 -->
+			<g>
+				<circle cx="-1.000000" cy="0.000000" r="1.000000"/>
+				<circle cx="0.020795" cy="-0.999784" r="1.000000"/>
+				<circle cx="1.000000" cy="0.000000" r="1.000000"/>
+				<circle cx="-0.020795" cy="0.999784" r="1.000000"/>
+				<circle cx="0.000000" cy="0.000000" r="1.000000"/>
+			</g>
+		</g>
+		<g fill="none" stroke="#8c1212">
+			<!-- layer: layer-2 -->
+			<g>
+				<g>
+					<line x1="1.500000" x2="-1.500000" y1="1.500000" y2="1.500000"/>
+					<line x1="1.500000" x2="-1.500000" y1="-1.500000" y2="-1.500000"/>
+					<line x1="1.500000" x2="1.500000" y1="1.500000" y2="-1.500000"/>
+					<line x1="-1.500000" x2="-1.500000" y1="1.500000" y2="-1.500000"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

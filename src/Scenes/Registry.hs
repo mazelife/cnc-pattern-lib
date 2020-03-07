@@ -10,16 +10,19 @@ import System.Exit (die)
 
 import Scene (Scene)
 
+import qualified Scenes.HobermanCylinder as H (getScene)
 import qualified Scenes.HuffmanTower as HT (getScene)
 import qualified Scenes.Resch as R (getScene)
 import qualified Scenes.Simple as S (getScene)
-
+import qualified Scenes.Triangles as TR (getScene)
 
 scenes :: Map.Map String (IO Scene)
 scenes = Map.fromList 
-    [ ("huffman-tower", HT.getScene)
+    [ ("hoberman-cylinder", H.getScene)
+    , ("huffman-tower", HT.getScene)
     , ("resch", R.getScene)
-    , ("simple", S.getScene)]
+    , ("simple", S.getScene)
+    , ("triangles", TR.getScene)]
 
 
 getSceneOrExit :: String -> IO Scene

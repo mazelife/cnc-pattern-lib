@@ -4,7 +4,6 @@ module MergeTest where
 
 import Data.List ((\\))
 
-
 import Test.Tasty
 import Test.Tasty.HUnit
 

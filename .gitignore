@@ -6,3 +6,6 @@ cnc-pattern-lib.cabal
 *.lock
 .DS_Store
 .idea/
+.vscode/
+
+!/examples/*.svg

@@ -16,6 +16,7 @@ module Point
     , magSquared
     , mirror
     , rotate
+    , cartesianProduct
     ) where
 
 import ApproxEq
@@ -123,6 +124,9 @@ rotate a p t = p + Point (ax * cos t - ay * sin t) (ax * sin t + ay * cos t)
     where
         Point ax ay = a - p
 
-
+-- | Return the cartesian product of a set of coordinates on the X axis
+-- and a set of coordinates on the Y axis as a series of points.
+cartesianProduct :: [Float] -> [Float] -> [Point]
+cartesianProduct xs ys = Point <$> xs <*> ys
 
 

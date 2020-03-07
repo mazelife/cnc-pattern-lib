@@ -7,6 +7,7 @@ import Line (pattern Line)
 import Point (pattern Point)
 import Rectangle (mkRectangle)
 import Scene
+import Shape
 import Style
 
 {--
@@ -21,11 +22,11 @@ white = "#ffffff"
 
 getScene :: IO Scene
 getScene = do
-    let allArcs = mconcat $ map (\p -> G.translateP baseArcs p) ps
-    let allLines = mconcat $ map (\p -> G.translateP baseLines p) ps
+    let allArcs = mconcat $ map (\p -> translateP baseArcs p) ps
+    let allLines = mconcat $ map (\p -> translateP baseLines p) ps
     optLines <- G.optimizeGroupAndLog allLines 0.1
-    let final = framingRect +: G.toLayer allArcs ++ G.toLayer optLines
-    pure (createScene "huffman_tower" 8 3 layerStyle `addElement` final)
+    let final = framingRect +: G.toLayer "" allArcs <> G.toLayer "" optLines
+    pure $ Scene 8 3 layerStyle [toSvg final]
   where
     layerStyle = StyleAttrs { strokeColor=Just "#03161d"
                             , strokeWidth=Just 0.05
@@ -42,16 +43,16 @@ getScene = do
     a1 = Arc c1 len (2 * pi / 3) pi
     c2 = c1 * 0.5
     a2 = Arc c2 (0.25 * len) (pi / 2) pi
-    ag0 = G.Group "arcs" [a1, a2]
-    ag1 = G.rotate ag0 (c2 * 0.5) pi
-    ag2 = G.mirror (ag0 <> ag1) c2 (Point 0 1)
+    ag0 = G.Group [a1, a2]
+    ag1 = rotate ag0 (c2 * 0.5) pi
+    ag2 = mirror (ag0 <> ag1) c2 (Point 0 1)
     baseArcs = ag0 <> ag1 <> ag2
 
     l1 = Line (Point 0 hgt) (Point (0.52 * len) hgt)
     l2 = Line (Point (0.5 * len) (hgt * 0.97)) (Point (0.5 * len) (1.5 * hgt))
-    lg0 = G.Group "lines" [l1, l2]  
-    lg1 = G.rotate lg0 (c2 * 0.5) pi
-    lg2 = G.mirror (lg0 <> lg1) c2 (Point 0 1)
+    lg0 = G.Group [l1, l2]  
+    lg1 = rotate lg0 (c2 * 0.5) pi
+    lg2 = mirror (lg0 <> lg1) c2 (Point 0 1)
     baseLines = lg0 <> lg1 <> lg2
    
     start = (-segments) / 2.0

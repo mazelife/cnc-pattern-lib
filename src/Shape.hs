@@ -31,7 +31,7 @@ class Transformable s where
     -- Move a shape in space adding the given point to the X and Y axes.
     translateP :: s -> Point -> s
     
-    -- Rotate shape a about a line through point p along vector t
+    -- Rotate a shape about a line through point p along vector t
     rotate     :: s -> Point -> Float -> s
     
     -- Mirror a shape about a line through point p along vector v    

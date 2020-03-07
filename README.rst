@@ -23,7 +23,7 @@ This will compile the code, build an executable, and copy the generated executab
 	  Render a scene as an SVG file.
 
 	Available options:
-	  SCENE                    Name of scene to render. One of: huffman-tower, resch
+	  SCENE                    Name of scene to render. One of: huffman-tower, resch, simple
 	  --preview                Show SVG in preview window.
 	  -h,--help                Show this help text
 
@@ -206,19 +206,8 @@ You can see the full version of this scene in the ``Scenes`` submodule as ``Scen
 .. image:: examples/simple.png
 
 
+Planned Improvements
+--------------------
+
+
 [1] Why can't we merge a layer? Or transform it? Layers represent a heterogeneous collection of types, which are implemented here using Haskell's `existential types <https://wiki.haskell.org/Existential_type>`_. Existential types pack up a value with operations on that value, and hide the actual value's types. What this means is we can't specialize a type once we've packed it up in a type (here called ``ShapeLike``).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

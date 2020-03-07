@@ -1,30 +1,33 @@
 module Scenes.Simple (getScene) where
 
-import Circle
-import Layer ((+:))
-import qualified Group as G
-import Point
-import Rectangle
-import Scene
-import Style
-import Shape
+import Circle (pattern Circle)
+import Layer (mkLayerWithStyle)
+import Group (pattern Group, optimizeGroup, toLayer)
+import Point (pattern Point)
+import Rectangle (mkRectangle)
+import Scene (Scene, mkSceneWithStyle)
+import Style (pattern StyleAttrs, strokeColor, strokeWidth, fillColor, withStrokeColor)
+import Shape (rotate, translateP)
 
 
 -----------------------------------------------------------------------------
 -- The simple scene documented in the README.
--- Provides a nice worked example of all the basic concepts in this library.
+-- Provides a worked example of all the basic concepts in this library.
 -----------------------------------------------------------------------------
 
 getScene :: IO Scene
-getScene = pure $ createScene "simple" 5 5 layerStyle `addElement` layer
+getScene = pure $ mkSceneWithStyle 5 5 sceneStyle [layer1, layer2]
   where
     circle      = Circle (Point 0 0) 1
-    circleList  = [circle, translateP circle (Point 1 0), translateP circle (Point (-1) 0)]
-    circles     = G.Group "my three circles" circleList
-    moreCircles = G.rotate circles (Point 0 0) (-1.55)
-    allCircles  = G.optimizeGroup (circles <> moreCircles) 0.01
+    circleList  = [ circle
+                  , translateP circle (Point 1 0)
+                  , translateP circle (Point (-1) 0) ]
+    circles     = Group circleList
+    moreCircles = rotate circles (Point 0 0) (-1.55)
+    allCircles  = optimizeGroup (circles <> moreCircles) 0.01
+    layer1      = toLayer "circles" allCircles
     square      = mkRectangle (Point 1.5 1.5) (Point (-1.5) (-1.5))
-    layer       = square +: G.toLayer allCircles
-    layerStyle  = StyleAttrs { strokeColor=Just "#03161d"
+    layer2      = mkLayerWithStyle "square" [square] (withStrokeColor "#8c1212")
+    sceneStyle  = StyleAttrs { strokeColor=Just "#121c5b"
                              , strokeWidth=Just 0.05
                              , fillColor=Nothing }

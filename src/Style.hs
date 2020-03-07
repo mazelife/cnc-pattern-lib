@@ -6,9 +6,11 @@ module Style
     , strokeColor
     , strokeWidth
     , fillColor
+    , withStrokeColor
     , defaultStyleAttrs 
     , getAttrs
-    , applyStyle) where 
+    , applyStyle
+    , maybeApplyStyle) where 
 
 import Data.Maybe (fromMaybe, mapMaybe)
 
@@ -23,6 +25,9 @@ data StyleAttrs = StyleAttrs { strokeColor :: Maybe String
                              , fillColor   :: Maybe String
                              } deriving (Eq, Show)
 
+
+withStrokeColor :: String -> StyleAttrs
+withStrokeColor color = StyleAttrs {strokeColor=Just color, strokeWidth=Nothing, fillColor=Nothing}
 
 
 defaultFill :: StyleAttrs -> Maybe String
@@ -46,3 +51,7 @@ getAttrs style = mapMaybe genAttribute attributeHandlers
 
 applyStyle :: StyleAttrs -> S.Svg -> S.Svg
 applyStyle = applyAttrs . getAttrs
+
+maybeApplyStyle :: Maybe StyleAttrs -> S.Svg -> S.Svg
+maybeApplyStyle (Just style) = applyStyle style 
+maybeApplyStyle Nothing      = id

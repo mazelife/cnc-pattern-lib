@@ -8,13 +8,14 @@
 module Scene 
   ( Scene
   , pattern Scene
-  , name
   , width
   , height
   , style
   , elements
+  , mkScene
+  , mkSceneWithStyle
   , svgDoc
-  , createScene
+  , emptyScene
   , addElement
   , renderScene ) where 
 
@@ -27,12 +28,12 @@ import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Printf
 
 import Helpers (applyAttrs, roundToStr)
+import Layer (Layer)
 import Style
 import Shape
 
 
-data Scene = Scene { name        :: String
-                   , width       :: Float
+data Scene = Scene { width       :: Float
                    , height      :: Float
                    , style       :: StyleAttrs
                    , elements    :: [S.Svg]
@@ -40,7 +41,15 @@ data Scene = Scene { name        :: String
 
 
 instance Show Scene where
-  show scene = "Scene{name=" ++ (name scene) ++ "}"
+  show scene = "Scene{width=" ++ (show $ width scene) ++ " height=" ++ (show $ height scene) ++ "}"
+
+mkScene :: Float -> Float -> [Layer] -> Scene
+mkScene w h layers = let svgElements = map toSvg layers in
+  Scene { width=w, height=h, style=defaultStyleAttrs, elements=svgElements}
+
+mkSceneWithStyle :: Float -> Float -> StyleAttrs -> [Layer] -> Scene
+mkSceneWithStyle w h st layers = let svgElements = map toSvg layers in
+  Scene { width=w, height=h, style=st, elements=svgElements}
 
 
 instance SvgShape Scene where
@@ -49,14 +58,9 @@ instance SvgShape Scene where
                  ! A.width (widthAttr scene) 
                  ! A.height (heightAttr scene)  
                  ! A.viewbox (viewBox scene) $ do
-      title scene
       applyAttrs parentGroupAttrs (S.g $ do sequence_ (elements scene))
     where
       parentGroupAttrs = (A.transform $ transform scene) : (getAttrs $ style scene)
-
-
-title :: Scene -> S.Svg
-title = S.title . S.string . name
 
 
 widthAttr :: Scene -> S.AttributeValue
@@ -77,8 +81,8 @@ svgDoc scene core = S.docTypeSvg ! A.version "1.1" ! A.width (widthAttr scene) !
     S.g ! A.transform (transform scene) ! A.fill (S.stringValue "#ffffff") $ do core
 
 
-createScene :: String -> Float -> Float -> StyleAttrs -> Scene
-createScene n w h s = Scene n w h s []
+emptyScene :: Float -> Float -> StyleAttrs -> Scene
+emptyScene w h s = Scene w h s []
 
 
 addElement :: (SvgShape s) => Scene -> s -> Scene
@@ -90,6 +94,3 @@ renderScene :: IO Scene -> IO String
 renderScene sceneM = do 
   scene <- sceneM 
   return (renderSvg $ toSvg scene)
-
-
-

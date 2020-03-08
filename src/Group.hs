@@ -1,3 +1,9 @@
+{-|
+A module for creating collections of homogenous shape types, optimizing
+shapes (combining paths when possible or removing duplicates), applying
+transformations to all of them, and rendering them as SVG elements.
+-} 
+
 module Group where 
 
 import Control.Monad (mapM_)
@@ -11,15 +17,7 @@ import Layer (Layer, mkLayer)
 import qualified Shape as S
 import Style
 
-
------------------------------------------------------------------------------
--- A module for creating collections of homogenous shape types, optimizing
--- shapes (combining paths when possible or removing duplicates), applying
--- transformations to all of them, and rendering them as SVG elements.
------------------------------------------------------------------------------
-
-
--- | A  type represenitng a named group of some type of shape.
+-- | A type reprresenting a named group of some type of shape.
 newtype Group shape = Group [shape]
 
 instance (Show a) => Show (Group a) where
@@ -29,10 +27,11 @@ instance (Show a) => Show (Group a) where
 instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Semigroup (Group a) where
     (<>) (Group as) (Group bs) = Group (as ++ bs)
 
---- | There exists an identify element for any group.
+-- | There exists an identity element for any group.
 instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Monoid (Group a) where
     mempty = Group []
 
+-- | Groups can be transformed in the same way single shapes can.
 instance (S.Transformable a) => S.Transformable (Group a) where
 
     translate (Group ts) v = Group $ map (`S.translate` v) ts
@@ -45,9 +44,11 @@ instance (S.Transformable a) => S.Transformable (Group a) where
 
     offset (Group ts) p leftSide = Group $ map (\t -> S.offset t p leftSide) ts
 
+-- | Convert a group to a layer.
 toLayer :: (Show a, S.SvgShape a, S.Transformable a) => String -> Group a -> Layer
 toLayer name (Group shapes) = mkLayer name shapes
 
+-- | Number of shapes in the group.
 size :: Group a -> Int
 size (Group as) = length as
 
@@ -61,10 +62,12 @@ transformAndAppend :: (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) =>
 transformAndAppend fn (Group grp) = Group (grp <> newShapes)
     where newShapes = map fn grp
 
+-- | Produce a new group where all shapes that can be merged have been, plus all shapes that couldn't be.
 optimizeGroup :: (S.Mergable a) => Group a -> Float -> Group a
 optimizeGroup (Group grp) epsilon = Group (S.optimize grp epsilon)
 
-
+-- | Produce a new group where all shapes that can be merged have been, 
+-- plus all shapes that couldn't be, logging the result at the end.
 optimizeGroupAndLog :: (S.Mergable a) => Group a -> Float -> IO (Group a)
 optimizeGroupAndLog group epsilon = hPutStrLn stderr mssg >> return optGrp
   where 

@@ -6,9 +6,11 @@ module Point
     , fromFloat
     , pointMap
     , asTuple
+    -- * Operators for doing arithmetic on a point with a scalar float value
     , (|+|)
     , (|*|)
     , (|/|)
+    -- * Geometric point manipulation functions
     , cross
     , dot 
     , angleBetween
@@ -21,6 +23,9 @@ module Point
 
 import ApproxEq
 
+-- | A point in 2-d space:
+--
+--    @Point 3 4@
 data Point = Point !Float !Float deriving (Eq, Show)
 
 instance Num Point where
@@ -54,7 +59,6 @@ instance Floating Point where
     acosh (Point x y) = Point (acosh x) (acosh y)
     atanh (Point x y) = Point (atanh x) (atanh y)
 
-
 instance ApproxEq Point where
     approxEqual a b epsilon = let Point dx dy = abs (a - b) in
         dx < epsilon && dy < epsilon
@@ -83,19 +87,27 @@ pointMap f (Point x y) = Point (f x) (f y)
 asTuple :: Point -> (Float, Float)
 asTuple (Point x y) = (x, y)
 
--- Operators for doing arithmetic on a point with a scalar float value.
+-- | Add a scalar value to a point:
+--
+-- >>> Point 1 2 |+| 5
+-- Point 6 7
 (|+|) :: Point -> Float -> Point
 (|+|) p v = p + fromFloat v
 
+-- | Multiply a point by a scalar value:
+--
+-- >>> Point 1 2 |*| 5
+-- Point 5 10
 (|*|) :: Point -> Float -> Point
 (|*|) p v = p * fromFloat v
 
+-- | Divide a point by a scalar value:
+--
+-- >>> Point 10 10 |/| 5
+-- Point 2 2
 (|/|) :: Point -> Float -> Point
 (|/|) p v = p / fromFloat v
 
-
-
--- | Geometric point manipulation functions.
 
 
 cross :: Point -> Point -> Float
@@ -113,12 +125,12 @@ mag p = sqrt (dot p p)
 magSquared :: Point -> Float
 magSquared p = dot p p
 
--- Mirror point a about a line through point p along vector v
+-- | Mirror point a about a line through point p along vector v
 mirror :: Point -> Point -> Point -> Point
 mirror a p v = (-a) + 2 * p + 2 * w |*| dot (a - p) w 
     where w = v |/| mag v
 
--- Rotate point a about a line through point p along vector t
+-- | Rotate point a about a line through point p along vector t
 rotate :: Point -> Point -> Float -> Point
 rotate a p t = p + Point (ax * cos t - ay * sin t) (ax * sin t + ay * cos t)
     where

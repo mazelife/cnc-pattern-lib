@@ -1,9 +1,9 @@
 {-# LANGUAGE ExistentialQuantification, GADTs, FlexibleInstances #-}
 
------------------------------------------------------------------------------
--- A module for creating collections of heterogenous shape types, applying
--- transformations to all of them, and rendering them as SVG elements.
------------------------------------------------------------------------------
+{-|
+A module for creating collections of heterogenous shape types with uniform styling
+and rendering them as SVG elements.
+-}
 
 module Layer
     ( ShapeLike
@@ -44,7 +44,6 @@ data ShapeLike where
 pack :: (Show a, S.SvgShape a, S.Transformable a) => a -> ShapeLike
 pack = MkShape
 
--- | Any shape-like thing can be shown using the underlying shape's show method. 
 instance Show ShapeLike where
     show (MkShape a) = show a
 
@@ -70,10 +69,11 @@ data Layer = Layer { name   :: !String
                    , style  :: Maybe StyleAttrs 
                    } deriving (Show, Eq)
 
--- | Layer constructors
+-- | Layer constructor from a list of shapes: without style
 mkLayer :: (Show a, S.SvgShape a, S.Transformable a) => String -> [a] -> Layer
 mkLayer layerName ts = Layer layerName (map pack ts) Nothing 
 
+-- | Layer constructor from a list of shapes: with style
 mkLayerWithStyle :: (Show a, S.SvgShape a, S.Transformable a) => String -> [a] -> StyleAttrs -> Layer
 mkLayerWithStyle layerName ts st = Layer layerName (map pack ts) (Just st)
 
@@ -95,6 +95,11 @@ instance Monoid Layer where
     mempty = Layer "" [] Nothing
 
 -- | Cons operation on a layer:
+--
+--      @layer = mkLayer "layer-1" [shape1, shape3, shape3]@
+--
+--      @newlayer = shape+: layer@
+--
 infixr 5 +:
 (+:) :: (Show a, S.SvgShape a, S.Transformable a) => a -> Layer -> Layer
 (+:) shape layer = layer { shapes = pack shape : shapes layer}

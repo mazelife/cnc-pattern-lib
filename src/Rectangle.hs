@@ -1,3 +1,4 @@
+{-| A type representing a parallelogram (doesn't just have to be a rectangle). -}
 module Rectangle where
 
 import Control.Monad (mapM_)
@@ -18,7 +19,8 @@ data Rectangle = Rectangle { topLeft     :: P.Point
                            , bottomLeft  :: P.Point
                            } deriving (Eq, Show)
 
-
+-- | Constructor for a rectangle; supply one point for the top left
+-- and one point for the bottom right. 
 mkRectangle :: P.Point -> P.Point -> Rectangle
 mkRectangle tl br = 
     Rectangle
@@ -28,20 +30,17 @@ mkRectangle tl br =
         , bottomLeft=P.Point (xVal tl) (yVal br)
         }
 
-
+-- | Map a function over each point in the rectangle.
 mapPoints :: (P.Point -> P.Point) -> Rectangle -> Rectangle
 mapPoints f (Rectangle tl tr br bl) =
     Rectangle (f tl) (f tr) (f br) (f bl)
 
-
 instance SvgShape Rectangle where
     toSvg r = g $ mapM_ toSvg $ asLines r
-
 
 instance ApproxEq Rectangle where
     approxEqual a b epsilon = let fs = [topLeft, topRight, bottomRight, bottomLeft] in
         all (\f -> approxEqual (f a) (f b) epsilon) fs
-
 
 instance Transformable Rectangle where
 
@@ -72,7 +71,7 @@ origin :: Rectangle -> P.Point
 origin (Rectangle (P.Point x1 y1) _ (P.Point x2 y2) _) = 
     P.Point ((x2 + x1) / 2) ((y1 + y2) / 2)
 
-
+-- | Convert a rectangle to a list of lines 
 asLines :: Rectangle -> [L.Line]
 asLines r = [ L.Line (topLeft r) (topRight r)
             , L.Line (bottomLeft r) (bottomRight r)

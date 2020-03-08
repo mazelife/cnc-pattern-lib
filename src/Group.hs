@@ -31,6 +31,15 @@ instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Semigroup (G
 instance (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => Monoid (Group a) where
     mempty = Group []
 
+-- | A group can be mapped over just like any other container.
+instance Functor Group where 
+    fmap fn (Group as) = Group (fmap fn as)
+
+instance Applicative Group where
+    pure a = Group [a]
+    (<*>) (Group fn) (Group as) = Group ([f a | (f, a) <- (zip fn as)])
+
+
 -- | Groups can be transformed in the same way single shapes can.
 instance (S.Transformable a) => S.Transformable (Group a) where
 

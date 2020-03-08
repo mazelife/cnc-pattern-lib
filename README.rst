@@ -2,9 +2,10 @@
 CNC Pattern Library
 ===================
 
-A Haskell library/framework for creating tiling patterns for CNC routers. `cnc-pattern-lib` was heavily inbspired by `Sam Calisch's <http://samcalisch.com/>`_ `fold <https://github.com/calischs/fold/>`_ library for Python. This library creates SVG files, which can be read directly by many CNC routing software packages, and there are `open source programs <https://github.com/avwuff/SVG-to-GCode>`_ that allow you to convert between SVG and other common formats like `G-Code <https://en.wikipedia.org/wiki/G-code>`_
+A Haskell library/framework for creating tiling patterns for CNC routers. `cnc-pattern-lib` was inspired by `Sam Calisch's <http://samcalisch.com/>`_ `fold <https://github.com/calischs/fold/>`_ library for Python. This library creates SVG files, which can be read directly by many CNC routing software packages, and there are `open source programs <https://github.com/avwuff/SVG-to-GCode>`_ that allow you to convert between SVG and other common formats like `G-Code <https://en.wikipedia.org/wiki/G-code>`_
 
-Visit the `gallery <https://mazelife.github.io/cnc-pattern-lib/index.html>`_ to see all included patterns.
+* Visit the `gallery <https://mazelife.github.io/cnc-pattern-lib/index.html>`_ to see all included patterns.
+* View the haddock-based `documentation <https://mazelife.github.io/cnc-pattern-lib/haddock/>`_ for this library.
 
 
 Getting Started
@@ -214,7 +215,7 @@ Lastly, let's create a scene with our shapes. A scene can be thought of as the c
 
 You can see the full version of this scene in the ``Scenes`` submodule as ``Scenes.Simple``. It looks like this when rendered:
 
-.. image:: examples/simple.png
+.. image:: docs/simple.png
 
 
 Planned Improvements

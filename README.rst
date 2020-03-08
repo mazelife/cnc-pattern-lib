@@ -165,7 +165,7 @@ This will create a new group that is a rotation of our original group of circles
 
 	allCircles = circles <> moreCircles
 
-This gives us a new group of 6 circles. Another important operation you can perform on a group is to optimize it:
+This gives us a new group of 6 circles. Another important operation you can perform on a group is to optimize it::
 
 	allCircles = optimizeGroup (circles <> moreCircles) 0.001
 
@@ -189,7 +189,7 @@ Finally let's create a different shape, a square that contains our original circ
 	
 	square = mkRectangle (Point 1.5 1.5) (Point (-1.5) (-1.5))
 
-At some point we may wish to store our circles and our square in some kind of single container. Groups won't work for this because a group can only contain one kind of shape and we have two. This is where layers come in:
+At some point we may wish to store our circles and our square in some kind of single container. Groups won't work for this because a group can only contain one kind of shape and we have two. This is where layers come in::
 
 	import Layer
 

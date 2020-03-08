@@ -4,6 +4,9 @@ CNC Pattern Library
 
 A Haskell library/framework for creating tiling patterns for CNC routers. `cnc-pattern-lib` was heavily inbspired by `Sam Calisch's <http://samcalisch.com/>`_ `fold <https://github.com/calischs/fold/>`_ library for Python. This library creates SVG files, which can be read directly by many CNC routing software packages, and there are `open source programs <https://github.com/avwuff/SVG-to-GCode>`_ that allow you to convert between SVG and other common formats like `G-Code <https://en.wikipedia.org/wiki/G-code>`_
 
+Visit the `gallery <https://mazelife.github.io/cnc-pattern-lib/index.html>`_ to see all included patterns.
+
+
 Getting Started
 ---------------
 

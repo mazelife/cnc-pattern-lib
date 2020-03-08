@@ -7,7 +7,7 @@ A Haskell library/framework for creating tiling patterns for CNC routers. `cnc-p
 * Visit the `gallery <https://mazelife.github.io/cnc-pattern-lib/index.html>`_ to see all included patterns.
 * View the haddock-based `documentation <https://mazelife.github.io/cnc-pattern-lib/haddock/>`_ for this library.
 
-.. image:: docs/router.jpeg
+.. image:: docs/router.jpg
 	:align: center
 
 

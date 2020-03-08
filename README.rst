@@ -188,18 +188,26 @@ At some point we may wish to store our circles and our square in some kind of si
 
 	layer = square +: (toLayer "circles" allCircles) 
 
-Note that layers must be given a name (which is rendered as a comment in the SVG file and can be helpful for debugging). We're using the ``+:`` Layer combinator, which is the same as Haskell's ``cons`` operator (``:``) for lists. Our ``layer`` contains our square and six circles. Layers also belong to the ``SvgShape`` typeclass, meaning we can do ``toSvg layer``. But they don't belong to the ``Transformable`` or ``Mergable`` typeclass [1]. Layers do provide one useful feature which is that we can apply a uniform style to them:
+Note that layers must be given a name (which is rendered as a comment in the SVG file and can be helpful for debugging). We're using the ``+:`` Layer combinator, which is the same as Haskell's ``cons`` operator (``:``) for lists. Our ``layer`` contains our square and six circles. Layers also belong to the ``SvgShape`` typeclass, meaning we can do ``toSvg layer``. But they don't belong to the ``Transformable`` or ``Mergable`` typeclass [1]. Layers do provide one useful feature which is that we can apply a uniform style to them::
 
-	styledLayer = withStyle layer Style {strokeColor="red", strokeWidth=2, fillColor="green"}
+	import Style
+	
+	someStyle = StyleAttrs {strokeColor=Just "red", strokeWidth=Just 2, fillColor=Just "green"}
+	styledLayer = mkLayerWithStyle "red-circles" allCircles someStyle
 
 When rendered, ``styledLayer`` will include stroke color, width, and fill color on all it's objects.
 
-Lastly, let's create a scene with our shapes::
+Lastly, let's create a scene with our shapes. A scene can be thought of as the canvas for our pattern. It has a length and width, and can be rendered out to an SVG file. A scene will also have an overall ``Style`` associated with it (although this will be overriden by any layer-specific styles for that layer). Let's create a 5in x 5in canvas containing our layers. Let's say we decide we want all of the shapes in our scene to have a `stroke width <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-width>`_ of ``0.5``, and we want the square in our scene to be red and the circles blue. A strightforward way to handle this would be to set the global scene style to have a stroke width of ``0.5`` and a stroke color of blue. And then put our square in a separate layer with it's own style::
 
 	import Scene
 
-	emptyScene = Scene {name="my scene", width=8, height=8, style=defaultStyleAttrs, elements=[]}
-	scene = addElement addElement layer
+	circlesLayer = toLayer "circles" allCircles
+	squareLayer = mkLayerWithStyle "square" [square] withStrokeColor "#8c1212"
+	globalStyle = StyleAttrs { strokeColor=Just "#121c5b"
+                             , strokeWidth=Just 0.05
+                             , fillColor=Nothing }
+
+	scene = mkSceneWithStyle 5 5 globalStyle [circlesLayer, squareLayer]
 
 You can see the full version of this scene in the ``Scenes`` submodule as ``Scenes.Simple``. It looks like this when rendered:
 
@@ -209,5 +217,11 @@ You can see the full version of this scene in the ``Scenes`` submodule as ``Scen
 Planned Improvements
 --------------------
 
+#. Allow users to specify other units (aside from inches)
+#. Implement some further SVG style attributes
+#. Add more example patterns
+
+Footnotes
+---------
 
 [1] Why can't we merge a layer? Or transform it? Layers represent a heterogeneous collection of types, which are implemented here using Haskell's `existential types <https://wiki.haskell.org/Existential_type>`_. Existential types pack up a value with operations on that value, and hide the actual value's types. What this means is we can't specialize a type once we've packed it up in a type (here called ``ShapeLike``).

@@ -5,19 +5,20 @@ license:             BSD3
 author:              "James Stevenson"
 maintainer:          "james.m.stevenson (λ) gmail (dot) com"
 copyright:           "James Stevenson"
+# Metadata used when publishing your package
+synopsis:            Haskell library for creating SVG patterns for CNC routers 
+category:            Graphics
 
 extra-source-files:
 - README.rst
 - .hlint.yaml
 
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
+
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/mazelife/cnc-pattern-lib#readme>
+# common to point users to the README.rst file.
+description:         Please see the README on GitHub at for more info <https://github.com/mazelife/cnc-pattern-lib#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -33,7 +34,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -fwarn-tabs
-#- -Werror
+- -Werror
 - -funbox-strict-fields
 
 

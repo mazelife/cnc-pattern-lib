@@ -1,3 +1,8 @@
+{-|
+A module for handling registration of scenes so they can be rendered by the 
+CLI executable.
+-} 
+
 module Scenes.Registry
     ( getSceneOrExit
     , scenes
@@ -17,6 +22,7 @@ import qualified Scenes.Resch as R (getScene)
 import qualified Scenes.Simple as S (getScene)
 import qualified Scenes.Triangles as TR (getScene)
 
+-- | Register scenes and their CLI lable here.
 scenes :: Map.Map String (IO Scene)
 scenes = Map.fromList 
     [ ("hoberman-cylinder", H.getScene)
@@ -25,12 +31,13 @@ scenes = Map.fromList
     , ("simple", S.getScene)
     , ("triangles", TR.getScene)]
 
-
+-- | Return the named scene or exit the program with an error if it doesn't exist.
 getSceneOrExit :: String -> IO Scene
 getSceneOrExit sceneName =  fromMaybe
     (die
        ("Scene with the name \"" ++ sceneName ++ "\" does not exist."))
     (Map.lookup sceneName scenes)
 
+-- | Comma-separated list of all scene labels registered in thei module.
 scenesLabel :: String
 scenesLabel = intercalate ", " (Map.keys scenes)

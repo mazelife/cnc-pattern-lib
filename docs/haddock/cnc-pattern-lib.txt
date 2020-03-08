@@ -2,7 +2,9 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | Please see the README on GitHub at
+-- | Haskell library for creating SVG patterns for CNC routers
+--   
+--   Please see the README on GitHub at for more info
 --   <a>https://github.com/mazelife/cnc-pattern-lib#readme</a>
 @package cnc-pattern-lib
 @version 0.1.0.0
@@ -103,17 +105,39 @@ instance GHC.Float.Floating Point.Point
 instance ApproxEq.ApproxEq Point.Point
 instance GHC.Classes.Ord Point.Point
 
+
+-- | Typeclasses for shapes
 module Shape
+
+-- | Typeclass for shapes that can be converted to SVG elements
 class SvgShape s
+
+-- | Convert a shape to a <a>blaze-svg</a> element.
 toSvg :: SvgShape s => s -> Svg
+
+-- | Typeclass for shapes that have transformation operations in cartesian
+--   space
 class Transformable s
+
+-- | Move a shape in space adding the given scalar to the X and Y axes.
 translate :: Transformable s => s -> Float -> s
+
+-- | Move a shape in space adding the given point to the X and Y axes.
 translateP :: Transformable s => s -> Point -> s
+
+-- | Rotate a shape about a line through point p along vector t
 rotate :: Transformable s => s -> Point -> Float -> s
+
+-- | Mirror a shape about a line through point p along vector v
 mirror :: Transformable s => s -> Point -> Point -> s
 offset :: Transformable s => s -> Point -> Bool -> s
 class Mergable s
+
+-- | If two shapes can be merged into one, returen the merged shape Makes
+--   the most sense for lines and arcs.
 merge :: Mergable s => s -> s -> Float -> Maybe s
+
+-- | Merge all shapes in a given list that can be merged
 optimize :: Mergable s => [s] -> Float -> [s]
 
 module Line
@@ -383,9 +407,19 @@ getScene :: IO Scene
 module Scenes.HobermanCylinder
 getScene :: IO Scene
 
+
+-- | A module for handling registration of scenes so they can be rendered
+--   by the CLI executable.
 module Scenes.Registry
+
+-- | Return the named scene or exit the program with an error if it doesn't
+--   exist.
 getSceneOrExit :: String -> IO Scene
+
+-- | Register scenes and their CLI lable here.
 scenes :: Map String (IO Scene)
+
+-- | Comma-separated list of all scene labels registered in thei module.
 scenesLabel :: String
 
 module CLIOpts

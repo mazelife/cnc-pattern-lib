@@ -1,3 +1,4 @@
+{-| Typeclasses for shapes -}
 module Shape
     ( SvgShape
     , toSvg
@@ -18,34 +19,35 @@ import qualified Text.Blaze.Svg11 as S
 import Point (Point)
 
 
--- Typeclass for shapes that can be converted to SVG elements 
+-- | Typeclass for shapes that can be converted to SVG elements 
 class SvgShape s where
+    -- | Convert a shape to a [blaze-svg](https://hackage.haskell.org/package/blaze-svg-0.3.6.1) element.
     toSvg :: s -> S.Svg
 
 
--- Typeclass for shapes that have transformation operations in cartesian space
+-- | Typeclass for shapes that have transformation operations in cartesian space
 class Transformable s where
-    -- Move a shape in space adding the given scalar to the X and Y axes.
+    -- | Move a shape in space adding the given scalar to the X and Y axes.
     translate  :: s -> Float -> s
     
-    -- Move a shape in space adding the given point to the X and Y axes.
+    -- | Move a shape in space adding the given point to the X and Y axes.
     translateP :: s -> Point -> s
     
-    -- Rotate a shape about a line through point p along vector t
+    -- | Rotate a shape about a line through point p along vector t
     rotate     :: s -> Point -> Float -> s
     
-    -- Mirror a shape about a line through point p along vector v    
+    -- | Mirror a shape about a line through point p along vector v    
     mirror     :: s -> Point -> Point -> s
     
     offset     :: s -> Point -> Bool -> s
 
 
 class Mergable s where    
-    -- If two shapes can be merged into one, returen the merged shape
+    -- | If two shapes can be merged into one, returen the merged shape
     -- Makes the most sense for lines and arcs.
     merge    :: s -> s -> Float -> Maybe s
     
-    -- Merge all shapes in a given list that can be merged
+    -- | Merge all shapes in a given list that can be merged
     optimize :: [s] -> Float -> [s]
     optimize ms = optimize' ms []
 

@@ -9,3 +9,4 @@ cnc-pattern-lib.cabal
 .vscode/
 
 !/examples/*.svg
+!/docs/*.svg

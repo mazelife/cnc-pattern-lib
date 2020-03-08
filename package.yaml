@@ -45,7 +45,7 @@ default-extensions:
 - PatternSynonyms
 
 executables:
-  cnc-pattern-lib-exe:
+  cnc-pattern-lib:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

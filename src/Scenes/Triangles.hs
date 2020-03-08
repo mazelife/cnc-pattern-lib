@@ -40,7 +40,6 @@ getScene = do
     tm = map (\x -> (x - n / 2 + 0.25) * l * 3) [0..m - 1]
     pts = Point <$> tm <*> th
     final = mconcat $ map (\p -> translateP g3 p) pts
-    tl = Point ((-1.5) * m - 0.25 * l) (0.5 * sqrt 3 * (n + 0.5) * l)
-    br = Point (1.5 * m - 0.25 * l) ((-0.5) * sqrt 3 * (n + 0.5) * l)
-    frame = mkLayer "rectangles" [mkRectangle tl br]
-
+    topLeft = Point ((-1.5 * m - 0.25) * 0.366) (0.5 * sqrt 3 * (n + 0.5) * l)
+    bottomRight = Point ((1.5 * m - 0.25) * 0.556) (-0.5 * sqrt 3 * (n + 0.5) * l)
+    frame = mkLayer "frame" [mkRectangle topLeft bottomRight]

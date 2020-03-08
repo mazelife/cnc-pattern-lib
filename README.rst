@@ -9,17 +9,17 @@ Getting Started
 
 This library is designed to work with `Stack <https://docs.haskellstack.org/en/stable/README/>`_, a cross-platform program for developing Haskell projects, so you should start by making sure you have that installed.
 
-You can check that everything works as expected by running ``stack test``, which should (sucessfully) run the project's tests. ``cnc-pattern-lib``. To start generating SVG files, build the ``cnc-pattern-lib-exe`` executable::
+You can check that everything works as expected by running ``stack test``, which should (sucessfully) run the project's tests. ``cnc-pattern-lib``. To start generating SVG files, build the ``cnc-pattern-lib`` executable::
 
 	$> stack install
 
-This will compile the code, build an executable, and copy the generated executable to your local bin path (e.g. ``~/.local/bin`` on OS X). The ``cnc-pattenr-lib-exe`` executable is self-documenting through its ``--help`` flag::
+This will compile the code, build an executable, and copy the generated executable to your local bin path (e.g. ``~/.local/bin`` on OS X). The ``cnc-pattenr-lib`` executable is self-documenting through its ``--help`` flag::
 
 
-	$> cnc-pattern-lib-exe --help
+	$> cnc-pattern-lib --help
 	cnc-pattern-lib - a program to render SVG files for CNC routers
 
-	Usage: cnc-pattern-lib-exe SCENE [--preview]
+	Usage: cnc-pattern-lib SCENE [--preview]
 	  Render a scene as an SVG file.
 
 	Available options:
@@ -30,7 +30,7 @@ This will compile the code, build an executable, and copy the generated executab
 
 We can render one of the available scenes (i.e. SVG files) thusly::
 
-	$> cnc-pattern-lib-exe huffman-tower > huffman-tower.svg
+	$> cnc-pattern-lib huffman-tower > huffman-tower.svg
 
 You can then take a look at the output file ``huffman-tower.svg`` in you SVG viewer of choice.
 

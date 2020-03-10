@@ -120,17 +120,17 @@ toSvg :: SvgShape s => s -> Svg
 class Transformable s
 
 -- | Move a shape in space adding the given scalar to the X and Y axes.
-translate :: Transformable s => s -> Float -> s
+translate :: Transformable s => Float -> s -> s
 
 -- | Move a shape in space adding the given point to the X and Y axes.
-translateP :: Transformable s => s -> Point -> s
+translateP :: Transformable s => Point -> s -> s
 
 -- | Rotate a shape about a line through point p along vector t
-rotate :: Transformable s => s -> Point -> Float -> s
+rotate :: Transformable s => Point -> Float -> s -> s
 
 -- | Mirror a shape about a line through point p along vector v
-mirror :: Transformable s => s -> Point -> Point -> s
-offset :: Transformable s => s -> Point -> Bool -> s
+mirror :: Transformable s => Point -> Point -> s -> s
+offset :: Transformable s => Point -> Bool -> s -> s
 class Mergable s
 
 -- | If two shapes can be merged into one, returen the merged shape Makes
@@ -301,14 +301,6 @@ pack :: (Show a, SvgShape a, Transformable a) => a -> ShapeLike
 --   </pre>
 (+:) :: (Show a, SvgShape a, Transformable a) => a -> Layer -> Layer
 infixr 5 +:
-
--- | Functions that mirror those in the Transformable typeclass, but act on
---   a whole layer of shapes, rather than a single shape.
-translate :: Layer -> Float -> Layer
-translateP :: Layer -> Point -> Layer
-rotate :: Layer -> Point -> Float -> Layer
-mirror :: Layer -> Point -> Point -> Layer
-offset :: Layer -> Point -> Bool -> Layer
 instance GHC.Classes.Eq Layer.Layer
 instance GHC.Show.Show Layer.Layer
 instance Shape.SvgShape Layer.Layer
@@ -389,6 +381,8 @@ toSvgWithStyle :: SvgShape s => Group s -> StyleAttrs -> Svg
 instance GHC.Show.Show a => GHC.Show.Show (Group.Group a)
 instance (GHC.Show.Show a, Shape.SvgShape a, Shape.Transformable a, Shape.Mergable a) => GHC.Base.Semigroup (Group.Group a)
 instance (GHC.Show.Show a, Shape.SvgShape a, Shape.Transformable a, Shape.Mergable a) => GHC.Base.Monoid (Group.Group a)
+instance GHC.Base.Functor Group.Group
+instance GHC.Base.Applicative Group.Group
 instance Shape.Transformable a => Shape.Transformable (Group.Group a)
 
 module Scenes.Triangles

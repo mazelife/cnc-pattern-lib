@@ -4,7 +4,6 @@ module Shape
     , toSvg
     , Transformable 
     , translate
-    , translateP
     , translatePoints
     , rotate
     , mirror
@@ -29,15 +28,15 @@ class SvgShape s where
 -- | Typeclass for shapes that have transformation operations in cartesian space
 class Transformable s where
     -- | Move a shape in space adding the given scalar to the X and Y axes.
-    translate  :: Float -> s -> s
+    --translate  :: Float -> s -> s
     
     -- | Move a shape in space adding the given point to the X and Y axes.
-    translateP :: Point -> s -> s
+    translate :: Point -> s -> s
 
     translatePoints :: [Point] -> s -> [s]
-    translatePoints ps s = map (\p -> translateP p s) ps
+    translatePoints ps s = map (\p -> translate p s) ps
     
-    -- | Rotate a shape about a line through point p along vector t
+    -- | Rotate a shape about a line through point p by t radians
     rotate     :: Point -> Float -> s -> s
     
     -- | Mirror a shape about a line through point p along vector v    

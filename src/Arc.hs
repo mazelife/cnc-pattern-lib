@@ -54,10 +54,7 @@ instance ApproxEq Arc where
 
 instance Transformable Arc where
     
-    translate v (Arc c r th1 th2) = let newC = c |+| v in 
-        Arc newC r th1 th2
-
-    translateP v (Arc c r th1 th2) = let newC = c + v in 
+    translate v (Arc c r th1 th2) = let newC = c + v in 
         Arc newC r th1 th2
 
     rotate p t (Arc c r th1 th2) = let newC = P.rotate c p t in 

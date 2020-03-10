@@ -16,7 +16,7 @@ circleGeometryTest = let ?epsilon = (0.001 :: Double) in testGroup "Test geometr
   [ testCase "Circles are close function" $
       (approxEqual a semiClose  0.01 @?= True) >> (approxEqual a semiClose  0.0001 @?= False)
   , testCase "Translate function" $
-      translate 2.5 a @?= mkCircle 2.5 2.5 1.5
+      translate (P.Point 2.5 2.5) a @?= mkCircle 2.5 2.5 1.5
   , testCase "Rotate function" $
       rotate (P.Point 2 3) 2.5 a @?~ mkCircle 5.397 4.206 1.5
   , testCase "Mirror function" $

@@ -7,7 +7,7 @@ import Data.List (all)
 import Text.Blaze.Svg11 (g)
 
 import ApproxEq
-import Point (xVal, yVal, (|+|))
+import Point (xVal, yVal)
 import qualified Line as L
 import qualified Point as P
 import Shape
@@ -43,19 +43,15 @@ instance ApproxEq Rectangle where
         all (\f -> approxEqual (f a) (f b) epsilon) fs
 
 instance Transformable Rectangle where
+    translate p rect              = mapPoints (\r -> r + p) rect  
 
-    translate v rect = mapPoints (\r -> r |+| v) rect 
-
-    translateP p rect = mapPoints (\r -> r + p) rect
-
-    -- | Rotate by ``t`` radians around point p. 
     rotate (P.Point px py) t rect = mapPoints (untransform . rotate_ . transform) rect
       where 
         transform (P.Point a b) = P.Point (a - px) (b - py)
         rotate_ p               = P.rotate p (P.Point 0 0) t
         untransform (P.Point a b)     = P.Point (a + px) (b + py)
 
-    mirror p v rect = mapPoints (\r -> P.mirror r p v) rect
+    mirror p v rect               = mapPoints (\r -> P.mirror r p v) rect
 
     offset p leftSide (Rectangle tl tr br bl) = Rectangle a b c d
       where  

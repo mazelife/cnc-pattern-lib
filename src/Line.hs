@@ -18,7 +18,7 @@ import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 
 import ApproxEq
-import Point ((|/|), (|+|))
+import Point ((|/|))
 import qualified Point as P
 import Helpers (fta)
 import Shape
@@ -40,15 +40,9 @@ instance ApproxEq Line where
 
 
 instance Transformable Line where
-
-    translate v l = Line (start l |+| v) (end l |+| v)
-
-    translateP p l = Line (start l + p) (end l + p)
-
-    rotate p t l = Line (P.rotate (start l) p t) (P.rotate (end l) p t)
-
-    mirror p v l = Line (P.mirror (start l) p v) (P.mirror (end l) p v)
-
+    translate p l       = Line (start l + p) (end l + p)
+    rotate p t l        = Line (P.rotate (start l) p t) (P.rotate (end l) p t)
+    mirror p v l        = Line (P.mirror (start l) p v) (P.mirror (end l) p v)
     offset d leftSide l = Line (start l + d * r) (end l + d * r)
         where 
             n = end l - start l

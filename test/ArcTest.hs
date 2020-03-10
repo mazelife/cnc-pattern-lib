@@ -21,10 +21,8 @@ arcGeometryTest :: TestTree
 arcGeometryTest = let ?epsilon = (0.001 :: Double) in testGroup "Test geometric calculations on arcs"
   [ testCase "Arcs are approx. equal function" $
       (approxEqual a1 a1 0.01 @?= True) >> (approxEqual a1 a2 0.01 @?= False)
-  , testCase "Translate function" $
-      (translate 1.5 a1) @?~ Arc (P.Point 2.5 1.5) 2 4 5
   , testCase "TranslateP function" $
-      (translateP (P.Point 1.5 2) a1) @?~ Arc (P.Point 2.5 2) 2 4 5
+      (translate (P.Point 1.5 2) a1) @?~ Arc (P.Point 2.5 2) 2 4 5
   , testCase "Rotate function" $
       (rotate (P.Point 2 3) 2.5 a1) @?~ Arc (P.Point 4.596560 4.804959) 2 6.5 7.5
   , testCase "Mirror function" $

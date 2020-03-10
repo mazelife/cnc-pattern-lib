@@ -28,9 +28,7 @@ instance ApproxEq Circle where
 
 instance Transformable Circle where
 
-    translate v c = Circle{center=center c P.|+| v, radius=radius c}
-
-    translateP p c = Circle{center=center c + p, radius=radius c}
+    translate p c = Circle{center=center c + p, radius=radius c}
 
     rotate p t c = Circle{center=P.rotate (center c) p t, radius=radius c}
 

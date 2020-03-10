@@ -44,7 +44,6 @@ instance Applicative Group where
 -- | Groups can be transformed in the same way single shapes can.
 instance (S.Transformable a) => S.Transformable (Group a) where
     translate  = fmap . S.translate
-    translateP = fmap . S.translateP
     rotate     = (fmap .) . S.rotate
     mirror     = (fmap .) . S.mirror
     offset     = (fmap .) . S.offset
@@ -59,7 +58,7 @@ size (Group as) = length as
 
 -- | Clone a shape over a series of points, returning a group of the translated objects.
 translateOverPoints :: (S.Transformable s) => [Point] -> s -> Group s
-translateOverPoints ps s = Group $ fmap (\p -> S.translateP p s) ps
+translateOverPoints ps s = Group $ fmap (\p -> S.translate p s) ps
 
 -- | Clone a shape over a series of points, returning a group of the translated objects.
 translateGroupOverPoints :: (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => [Point] -> Group a -> Group a

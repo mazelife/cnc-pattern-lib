@@ -120,12 +120,13 @@ toSvg :: SvgShape s => s -> Svg
 class Transformable s
 
 -- | Move a shape in space adding the given scalar to the X and Y axes.
-translate :: Transformable s => Float -> s -> s
+--   translate :: Float -&gt; s -&gt; s
+--   
+--   Move a shape in space adding the given point to the X and Y axes.
+translate :: Transformable s => Point -> s -> s
+translatePoints :: Transformable s => [Point] -> s -> [s]
 
--- | Move a shape in space adding the given point to the X and Y axes.
-translateP :: Transformable s => Point -> s -> s
-
--- | Rotate a shape about a line through point p along vector t
+-- | Rotate a shape about a line through point p by t radians
 rotate :: Transformable s => Point -> Float -> s -> s
 
 -- | Mirror a shape about a line through point p along vector v
@@ -357,6 +358,14 @@ toLayer :: (Show a, SvgShape a, Transformable a) => String -> Group a -> Layer
 
 -- | Number of shapes in the group.
 size :: Group a -> Int
+
+-- | Clone a shape over a series of points, returning a group of the
+--   translated objects.
+translateOverPoints :: Transformable s => [Point] -> s -> Group s
+
+-- | Clone a shape over a series of points, returning a group of the
+--   translated objects.
+translateGroupOverPoints :: (Show a, SvgShape a, Transformable a, Mergable a) => [Point] -> Group a -> Group a
 
 -- | Remove any duplicate shapes from this group
 deduplicate :: (Ord t, ApproxEq t) => Group t -> Group t

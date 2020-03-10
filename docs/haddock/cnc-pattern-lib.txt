@@ -263,8 +263,14 @@ withStrokeColor :: String -> StyleAttrs
 -- | Shortcut constructor for an "empty" StyleAttrs instance (i.e. no
 --   styles are specified)
 defaultStyleAttrs :: StyleAttrs
+
+-- | Return a list of Blaze.SVG attributes from a given style.
 getAttrs :: StyleAttrs -> [Attribute]
+
+-- | Apply the given style to an SVG element.
 applyStyle :: StyleAttrs -> Svg -> Svg
+
+-- | Apply the given style to an SVG element, if provided.
 maybeApplyStyle :: Maybe StyleAttrs -> Svg -> Svg
 instance GHC.Show.Show Style.StyleAttrs
 instance GHC.Classes.Eq Style.StyleAttrs

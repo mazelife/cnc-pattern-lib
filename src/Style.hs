@@ -41,7 +41,7 @@ defaultFill = Just . fromMaybe "none" . fillColor
 strokeWidthStr :: StyleAttrs -> Maybe String
 strokeWidthStr = (roundToStr 4 <$>) . strokeWidth
 
--- Return a list of Blaze.SVG attributes from a given style.
+-- | Return a list of Blaze.SVG attributes from a given style.
 getAttrs :: StyleAttrs -> [S.Attribute]
 getAttrs style = mapMaybe genAttribute attributeHandlers
     where 
@@ -49,11 +49,11 @@ getAttrs style = mapMaybe genAttribute attributeHandlers
         genAttribute (acessor, attr) = attr . S.stringValue <$> acessor style
 
 
--- Apply the given style to an SVG element.
+-- | Apply the given style to an SVG element.
 applyStyle :: StyleAttrs -> S.Svg -> S.Svg
 applyStyle = applyAttrs . getAttrs
 
--- Apply the given style to an SVG element, if provided.
+-- | Apply the given style to an SVG element, if provided.
 maybeApplyStyle :: Maybe StyleAttrs -> S.Svg -> S.Svg
 maybeApplyStyle (Just style) = applyStyle style 
 maybeApplyStyle Nothing      = id

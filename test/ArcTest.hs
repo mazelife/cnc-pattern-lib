@@ -22,15 +22,15 @@ arcGeometryTest = let ?epsilon = (0.001 :: Double) in testGroup "Test geometric 
   [ testCase "Arcs are approx. equal function" $
       (approxEqual a1 a1 0.01 @?= True) >> (approxEqual a1 a2 0.01 @?= False)
   , testCase "Translate function" $
-      (translate a1 1.5) @?~ Arc (P.Point 2.5 1.5) 2 4 5
+      (translate 1.5 a1) @?~ Arc (P.Point 2.5 1.5) 2 4 5
   , testCase "TranslateP function" $
-      (translateP a1 (P.Point 1.5 2)) @?~ Arc (P.Point 2.5 2) 2 4 5
+      (translateP (P.Point 1.5 2) a1) @?~ Arc (P.Point 2.5 2) 2 4 5
   , testCase "Rotate function" $
-      (rotate a1 (P.Point 2 3) 2.5) @?~ Arc (P.Point 4.596560 4.804959) 2 6.5 7.5
+      (rotate (P.Point 2 3) 2.5 a1) @?~ Arc (P.Point 4.596560 4.804959) 2 6.5 7.5
   , testCase "Mirror function" $
-      (mirror a1 (P.Point 2 3) (P.Point (-1) 1)) @?~ Arc (P.Point 5 4) 2 (-0.287611) 0.712389
+      (mirror (P.Point 2 3) (P.Point (-1) 1) a1) @?~ Arc (P.Point 5 4) 2 (-0.287611) 0.712389
   , testCase "Offset function" $
-      (offset a1 (P.Point 1 0) True) @?~ Arc (P.Point 1 0) 1 4 5
+      (offset (P.Point 1 0) True a1) @?~ Arc (P.Point 1 0) 1 4 5
   ]
   where
     a1 = Arc (P.Point 1 0) 2 4 5

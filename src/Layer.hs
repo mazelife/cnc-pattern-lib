@@ -14,12 +14,7 @@ module Layer
     , mkLayer
     , mkLayerWithStyle    
     , pack
-    , (+:)
-    , translate
-    , translateP
-    , rotate
-    , mirror
-    , offset ) where
+    , (+:) ) where
 
 import Control.Monad (mapM_)
 
@@ -27,8 +22,6 @@ import Text.Blaze (stringComment)
 import Text.Blaze.Svg.Renderer.String (renderSvg)
 import Text.Blaze.Svg11 (g)
 
-
-import qualified Point as P
 import qualified Shape as S
 import Style
 
@@ -54,11 +47,11 @@ instance S.SvgShape ShapeLike where
     toSvg (MkShape a) = S.toSvg a
 
 instance S.Transformable ShapeLike where
-    translate (MkShape a) v               = pack $ S.translate a v
-    translateP (MkShape a) p              = pack $ S.translateP a p
-    rotate (MkShape a) p v                = pack $ S.rotate a p v
-    mirror (MkShape a) p v                = pack $ S.mirror a p v
-    offset (MkShape a) d leftSide         = pack $ S.offset a d leftSide
+    translate v (MkShape a)               = pack $ S.translate v a
+    translateP p (MkShape a)              = pack $ S.translateP p a
+    rotate p v (MkShape a)                = pack $ S.rotate p v a
+    mirror p v (MkShape a)                = pack $ S.mirror p v a
+    offset d leftSide (MkShape a)         = pack $ S.offset d leftSide a
 
 instance S.SvgShape [ShapeLike] where
     toSvg layer = g $ mapM_ S.toSvg layer
@@ -103,25 +96,3 @@ instance Monoid Layer where
 infixr 5 +:
 (+:) :: (Show a, S.SvgShape a, S.Transformable a) => a -> Layer -> Layer
 (+:) shape layer = layer { shapes = pack shape : shapes layer}
-
--- | Functions that mirror those in the Transformable typeclass, but act on a
--- whole layer of shapes, rather than a single shape.
-
-translate :: Layer -> Float -> Layer
-translate layer v = layer { shapes = map (\s -> S.translate s v) (shapes layer) }
-
-
-translateP :: Layer -> P.Point -> Layer
-translateP layer p = layer { shapes = map (\s -> S.translateP s p) (shapes layer) }
-
-
-rotate :: Layer -> P.Point -> Float -> Layer
-rotate layer p v = layer { shapes = map (\s -> S.rotate s p v) (shapes layer) }
-
-
-mirror :: Layer -> P.Point -> P.Point -> Layer
-mirror layer p v = layer { shapes = map (\s -> S.mirror s p v) (shapes layer) }
-
-
-offset :: Layer -> P.Point -> Bool -> Layer
-offset layer p leftSide = layer { shapes = map (\s -> S.offset s p leftSide) (shapes layer) }

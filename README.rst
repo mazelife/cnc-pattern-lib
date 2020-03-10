@@ -158,8 +158,7 @@ The ``Group`` type is the functional equivalent of the ``<g>`` `container type <
 
 We can apply transformations to groups too::
 
-	moreCircles = rotate circles (Point 0 0) (-1.55)
-
+	moreCircles = rotate (Point 0 0) (-1.55) circles
 
 This will create a new group that is a rotation of our original group of circles about a line through point (0,0) along vector -1.55. We can also combine groups (since ``Group`` implements ``Semigroup`` and ``Monoid``)::
 

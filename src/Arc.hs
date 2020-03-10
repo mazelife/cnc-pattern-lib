@@ -54,21 +54,21 @@ instance ApproxEq Arc where
 
 instance Transformable Arc where
     
-    translate (Arc c r th1 th2) v = let newC = c |+| v in 
+    translate v (Arc c r th1 th2) = let newC = c |+| v in 
         Arc newC r th1 th2
 
-    translateP (Arc c r th1 th2) v = let newC = c + v in 
+    translateP v (Arc c r th1 th2) = let newC = c + v in 
         Arc newC r th1 th2
 
-    rotate (Arc c r th1 th2) p t = let newC = P.rotate c p t in 
+    rotate p t (Arc c r th1 th2) = let newC = P.rotate c p t in 
         Arc newC r (th1 + t) (th2 + t)
 
-    mirror (Arc c r th1 th2) p v = Arc newC r (2 * vth - th2) (2 * vth - th1)
+    mirror p v (Arc c r th1 th2) = Arc newC r (2 * vth - th2) (2 * vth - th1)
       where
         newC = P.mirror c p v
         vth  = P.angleBetween (Point 1 0) v
 
-    offset (Arc c r th1 th2) (Point x _) leftSide = Arc c (r + e) th1 th2
+    offset (Point x _) leftSide (Arc c r th1 th2) = Arc c (r + e) th1 th2
       where e = if leftSide then x * (-1) else x
 
 instance Mergable Arc where
@@ -100,7 +100,7 @@ invert :: Arc -> Point -> Point -> Point
 invert (Arc c _ _ _) p b = P.mirror p b t
   where
     Point rx ry = b - c
-    t            = Point (-ry) rx
+    t           = Point (-ry) rx
 
 
 

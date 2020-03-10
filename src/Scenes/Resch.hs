@@ -39,16 +39,16 @@ getScene = do
     baseTriangle = Group [ Line p0 p1, Line p1 p2, Line p0 p2]
     -- Create a group from the base triangle rotated three times.
     rotationalVerticies = map (\r -> 2 * pi * r / 3 ) [0..2]
-    t0 = mconcat $ map (\t -> rotate baseTriangle (Point 0 0) t) rotationalVerticies
+    t0 = mconcat $ map (\t -> rotate (Point 0 0) t baseTriangle) rotationalVerticies
     -- Mirror this group twice.
-    t1 = t0 <> mirror t0 p0 (p1 - p0)
-    t2 = t1 <> mirror t1 (Point (0.5 * l) 0) (Point 0 1)
+    t1 = t0 <> mirror p0 (p1 - p0) t0
+    t2 = t1 <> mirror (Point (0.5 * l) 0) (Point 0 1) t1
 
     -- Clone the above group across a series of positions on our convas.
     xs = vectorToFloats $ (vector [0..5] - 6 / 2 + 0.25) * 3 * 0.5
     ys = vectorToFloats $ (vector [0..5] - 6 / 2 + 0.25) * sqrt 3 * 0.5
     positions = cartesianProduct xs ys
-    t3 = optimizeGroup (mconcat $ map (\p -> translateP t2 p) positions) 0.01
+    t3 = optimizeGroup (mconcat $ map (\p -> translateP p t2) positions) 0.01
     triangles = G.toLayer "triangles" t3
 
   -- Create a framing rectangle around the group.

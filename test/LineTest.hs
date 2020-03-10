@@ -27,13 +27,13 @@ lineGeometryTest = let ?epsilon = 0.001 in testGroup "Test geometric calculation
   [ testCase "Lines are close function" $
       (approxEqual a semiClose  0.01 @?= True) >> (approxEqual a semiClose  0.0001 @?= False)
   , testCase "Translate function" $
-      translate a 0.5 @?= expTranslateVal
+      translate 0.5 a @?= expTranslateVal
   , testCase "Rotate function" $
-      rotate a (P.Point 1 1) (0.5 * pi) @?~ expRotateVal
+      rotate (P.Point 1 1) (0.5 * pi) a @?~ expRotateVal
   , testCase "Line length function" $
       lineLength a @~? 3.60555
   , testCase "Line offset function" $
-      offset a (P.Point 1 1) True @?~ expOffsetVal
+      offset (P.Point 1 1) True a @?~ expOffsetVal
   , testCase "Line slope function" $
       (slope a @?= Right 1.5) >> (slope (mkLine 1 1 1 2) @?= Left "Inf")
   , testCase "Lines are parallel function" $

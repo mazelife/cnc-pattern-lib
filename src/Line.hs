@@ -41,15 +41,15 @@ instance ApproxEq Line where
 
 instance Transformable Line where
 
-    translate l v = Line (start l |+| v) (end l |+| v)
+    translate v l = Line (start l |+| v) (end l |+| v)
 
-    translateP l p = Line (start l + p) (end l + p)
+    translateP p l = Line (start l + p) (end l + p)
 
-    rotate l p t = Line (P.rotate (start l) p t) (P.rotate (end l) p t)
+    rotate p t l = Line (P.rotate (start l) p t) (P.rotate (end l) p t)
 
-    mirror l p v = Line (P.mirror (start l) p v) (P.mirror (end l) p v)
+    mirror p v l = Line (P.mirror (start l) p v) (P.mirror (end l) p v)
 
-    offset l d leftSide = Line (start l + d * r) (end l + d * r)
+    offset d leftSide l = Line (start l + d * r) (end l + d * r)
         where 
             n = end l - start l
             angle = if leftSide then pi / 2 else (-pi) / 2

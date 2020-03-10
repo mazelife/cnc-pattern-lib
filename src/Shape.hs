@@ -28,18 +28,18 @@ class SvgShape s where
 -- | Typeclass for shapes that have transformation operations in cartesian space
 class Transformable s where
     -- | Move a shape in space adding the given scalar to the X and Y axes.
-    translate  :: s -> Float -> s
+    translate  :: Float -> s -> s
     
     -- | Move a shape in space adding the given point to the X and Y axes.
-    translateP :: s -> Point -> s
+    translateP :: Point -> s -> s
     
     -- | Rotate a shape about a line through point p along vector t
-    rotate     :: s -> Point -> Float -> s
+    rotate     :: Point -> Float -> s -> s
     
     -- | Mirror a shape about a line through point p along vector v    
-    mirror     :: s -> Point -> Point -> s
+    mirror     :: Point -> Point -> s -> s
     
-    offset     :: s -> Point -> Bool -> s
+    offset     :: Point -> Bool -> s -> s
 
 
 class Mergable s where    

@@ -28,15 +28,15 @@ instance ApproxEq Circle where
 
 instance Transformable Circle where
 
-    translate c v = Circle{center=center c P.|+| v, radius=radius c}
+    translate v c = Circle{center=center c P.|+| v, radius=radius c}
 
-    translateP c p = Circle{center=center c + p, radius=radius c}
+    translateP p c = Circle{center=center c + p, radius=radius c}
 
-    rotate c p t = Circle{center=P.rotate (center c) p t, radius=radius c}
+    rotate p t c = Circle{center=P.rotate (center c) p t, radius=radius c}
 
-    mirror c p v = Circle{center=P.mirror (center c) p v, radius=radius c}
+    mirror p v c = Circle{center=P.mirror (center c) p v, radius=radius c}
 
-    offset c d leftSide = Circle{center=center c, radius=radius c + e}
+    offset d leftSide c = Circle{center=center c, radius=radius c + e}
         where e = if leftSide then P.xVal d * (-1) else P.xVal d
 
 

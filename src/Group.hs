@@ -42,16 +42,11 @@ instance Applicative Group where
 
 -- | Groups can be transformed in the same way single shapes can.
 instance (S.Transformable a) => S.Transformable (Group a) where
-
-    translate (Group ts) v = Group $ map (`S.translate` v) ts
-    
-    translateP (Group ts) p = Group $ map (`S.translateP` p ) ts
-    
-    rotate (Group ts) p v = Group $ map (\t -> S.rotate t p v) ts
-
-    mirror (Group ts) p v = Group $ map (\t -> S.mirror t p v) ts
-
-    offset (Group ts) p leftSide = Group $ map (\t -> S.offset t p leftSide) ts
+    translate v grp       = S.translate v <$> grp
+    translateP p grp      = S.translateP p <$> grp
+    rotate p v grp        = S.rotate p v <$> grp
+    mirror p v grp        = S.mirror p v <$> grp
+    offset p leftSide grp = S.offset p leftSide <$> grp
 
 -- | Convert a group to a layer.
 toLayer :: (Show a, S.SvgShape a, S.Transformable a) => String -> Group a -> Layer

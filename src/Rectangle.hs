@@ -44,23 +44,23 @@ instance ApproxEq Rectangle where
 
 instance Transformable Rectangle where
 
-    translate rect v = mapPoints (\r -> r |+| v) rect 
+    translate v rect = mapPoints (\r -> r |+| v) rect 
 
-    translateP rect p = mapPoints (\r -> r + p) rect
+    translateP p rect = mapPoints (\r -> r + p) rect
 
     -- | Rotate by ``t`` radians around point p. 
-    rotate rect (P.Point px py) t = mapPoints (untransform . rotate_ . transform) rect
+    rotate (P.Point px py) t rect = mapPoints (untransform . rotate_ . transform) rect
       where 
         transform (P.Point a b) = P.Point (a - px) (b - py)
         rotate_ p               = P.rotate p (P.Point 0 0) t
         untransform (P.Point a b)     = P.Point (a + px) (b + py)
 
-    mirror rect p v = mapPoints (\r -> P.mirror r p v) rect
+    mirror p v rect = mapPoints (\r -> P.mirror r p v) rect
 
-    offset (Rectangle tl tr br bl) p leftSide = Rectangle a b c d
+    offset p leftSide (Rectangle tl tr br bl) = Rectangle a b c d
       where  
-        L.Line a b = offset (L.Line tl tr) p leftSide
-        L.Line d c = offset (L.Line bl br) p leftSide
+        L.Line a b = offset p leftSide (L.Line tl tr)
+        L.Line d c = offset p leftSide (L.Line bl br)
 
 instance Mergable Rectangle where
     merge a b tol = if approxEqual a b tol then Just a else Nothing

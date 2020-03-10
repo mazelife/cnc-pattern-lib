@@ -111,8 +111,7 @@ Transformable
 
 All shapes support a set of geometric transformations:
 
-* ``translate  anyShape 1``: Move a shape in space adding the given scalar to the X and Y coordinates.
-* ``translateP anyShape (Point 1 2)``: Move a shape in space adding the given point to the X and Y coordinates.
+* ``translate  anyShape (Point 1 2)``: Move a shape in space adding the given point to the X and Y coordinates.
 * ``rotate     anyShape (Point 1 2) 3.4``: Rotate a shape about a line through point p along vector t.
 * ``mirror     anyShape (Point 1 2) (Point 3 2)``:  Mirror a shape about a line through point p along vector v
 * ``offset     anyShape (Point 1 2) True``: Offset a shape left (``True``) or right (``False``).

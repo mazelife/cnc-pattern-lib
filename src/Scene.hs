@@ -56,10 +56,10 @@ instance SvgShape Scene where
     S.docTypeSvg ! A.version "1.1" 
                  ! A.width (widthAttr scene) 
                  ! A.height (heightAttr scene)  
-                 ! A.viewbox (viewBox scene) $
+                 ! A.viewbox (viewBoxAttr scene) $
       applyAttrs parentGroupAttrs (S.g $ sequence_ (elements scene))
     where
-      parentGroupAttrs = A.transform (transform scene) : getAttrs (style scene)
+      parentGroupAttrs = A.transform (transformAttr scene) : getAttrs (style scene)
 
 -- | Extract an SVG attribbute value representing the width of the scene.
 widthAttr :: Scene -> S.AttributeValue
@@ -70,17 +70,17 @@ heightAttr :: Scene -> S.AttributeValue
 heightAttr s = S.stringValue $ roundToStr 2 (height s) ++ "in"
 
 -- | Extract an SVG attribbute value representing the view-box of the scene.
-viewBox :: Scene -> S.AttributeValue
-viewBox scene = S.stringValue $ "0 0 " ++ roundToStr 4 (width scene) ++ " " ++ roundToStr 4 (height scene)
+viewBoxAttr :: Scene -> S.AttributeValue
+viewBoxAttr scene = S.stringValue $ "0 0 " ++ roundToStr 4 (width scene) ++ " " ++ roundToStr 4 (height scene)
 
 -- | Extract an SVG attribbute value representing a transform on the scene.
-transform :: Scene -> S.AttributeValue
-transform scene = S.stringValue $ printf "translate(%s,%s) scale(1, -1)" (roundToStr 4 $ width scene * 0.5) (roundToStr 4 $ height scene * 0.5)
+transformAttr :: Scene -> S.AttributeValue
+transformAttr scene = S.stringValue $ printf "translate(%s,%s) scale(1, -1)" (roundToStr 4 $ width scene * 0.5) (roundToStr 4 $ height scene * 0.5)
 
 -- | Given a scene and an SVG element representing it's contents, render the final scene.
 svgDoc :: Scene -> S.Svg ->  S.Svg
-svgDoc scene core = S.docTypeSvg ! A.version "1.1" ! A.width (widthAttr scene) ! A.height (heightAttr scene)  ! A.viewbox (viewBox scene) $
-    S.g ! A.transform (transform scene) ! A.fill (S.stringValue "#ffffff") $ core
+svgDoc scene core = S.docTypeSvg ! A.version "1.1" ! A.width (widthAttr scene) ! A.height (heightAttr scene)  ! A.viewbox (viewBoxAttr scene) $
+    S.g ! A.transform (transformAttr scene) ! A.fill (S.stringValue "#ffffff") $ core
 
 
 emptyScene :: Float -> Float -> StyleAttrs -> Scene

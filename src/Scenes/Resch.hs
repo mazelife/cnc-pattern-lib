@@ -10,7 +10,7 @@ import Line (pattern Line)
 import Point (pattern Point, cartesianProduct, fromFloat)
 import Rectangle (mkRectangle)
 import Scene (Scene, mkSceneWithStyle)
-import Shape (mirror, rotate, translateP)
+import Shape (mirror, rotate)
 import Style 
 
 
@@ -47,8 +47,7 @@ getScene = do
     -- Clone the above group across a series of positions on our convas.
     xs = vectorToFloats $ (vector [0..5] - 6 / 2 + 0.25) * 3 * 0.5
     ys = vectorToFloats $ (vector [0..5] - 6 / 2 + 0.25) * sqrt 3 * 0.5
-    positions = cartesianProduct xs ys
-    t3 = optimizeGroup (mconcat $ map (\p -> translateP p t2) positions) 0.01
+    t3 = optimizeGroup (G.translateGroupOverPoints (cartesianProduct xs ys) t2) 0.01
     triangles = G.toLayer "triangles" t3
 
   -- Create a framing rectangle around the group.

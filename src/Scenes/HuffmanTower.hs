@@ -10,20 +10,9 @@ import Scene
 import Shape
 import Style
 
-{--
-orange = "#ef6101"
-lemon = "#fdac07"
-green = "#47802b"
-teal = "#045658"
-navy = "#03161d"
-white = "#ffffff"
---}
-
 
 getScene :: IO Scene
 getScene = do
-    let allArcs = mconcat $ map (\p -> translateP p baseArcs) ps
-    let allLines = mconcat $ map (\p -> translateP p baseLines) ps
     optLines <- G.optimizeGroupAndLog allLines 0.1
     let final = framingRect +: G.toLayer "" allArcs <> G.toLayer "" optLines
     pure $ Scene 8 3 layerStyle [toSvg final]
@@ -46,7 +35,7 @@ getScene = do
     ag0 = G.Group [a1, a2]
     ag1 = rotate (c2 * 0.5) pi ag0
     ag2 = mirror c2 (Point 0 1) (ag0 <> ag1)
-    baseArcs = ag0 <> ag1 <> ag2
+    baseArcs = ag0 <> ag1 <> ag2  
 
     l1 = Line (Point 0 hgt) (Point (0.52 * len) hgt)
     l2 = Line (Point (0.5 * len) (hgt * 0.97)) (Point (0.5 * len) (1.5 * hgt))
@@ -58,6 +47,8 @@ getScene = do
     start = (-segments) / 2.0
     ts = [start, (start + 1.0) .. start + segments - 1]
     ps = map (\x -> Point x 0) ts
+    allArcs = G.translateGroupOverPoints ps baseArcs
+    allLines = G.translateGroupOverPoints ps baseLines
 
 
 

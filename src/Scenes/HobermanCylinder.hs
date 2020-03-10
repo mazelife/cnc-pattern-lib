@@ -1,6 +1,6 @@
 module Scenes.HobermanCylinder (getScene) where
 
-import Group (pattern Group, optimizeGroupAndLog, toLayer)
+import Group (pattern Group, translateGroupOverPoints, optimizeGroupAndLog, toLayer)
 import Line
 import Point (pattern Point, cartesianProduct, fromFloat, xVal)
 import Scene
@@ -44,9 +44,10 @@ getScene = do
     l11 = Line (p3 - p2 + p1) (p3 + p1) 
 
     base = Group [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11]
-    t0 = base <> mirror p2 (Point 1 0) base
+    mirroredGroup = base <> mirror p2 (Point 1 0) base
     
     tot_w = 1.5 + xVal (p3 - p2 + p1)
     xs = map (\n -> n * tot_w - 0.5 * nx * tot_w) [0..3]
     ys = map (\n -> n * 2 * 0.5 - ny * 0.5) [0..5]
-    final = mconcat $ map (\p -> translateP p t0) (cartesianProduct xs ys)
+
+    final = translateGroupOverPoints (cartesianProduct xs ys) mirroredGroup

@@ -7,7 +7,7 @@ import Line (pattern Line)
 import Point (pattern Point, fromFloat)
 import Rectangle (mkRectangle)
 import Scene (Scene, pattern Scene)
-import Shape (toSvg, mirror, rotate, translateP)
+import Shape (toSvg, mirror, rotate)
 import Style 
 
 
@@ -39,7 +39,7 @@ getScene = do
     th = map (\x -> (x - n / 2 + 0.25) * l * sqrt 3) [0..n - 1]
     tm = map (\x -> (x - n / 2 + 0.25) * l * 3) [0..m - 1]
     pts = Point <$> tm <*> th
-    final = mconcat $ map (\p -> translateP p g3) pts
+    final = G.translateGroupOverPoints pts g3
     topLeft = Point ((-1.5 * m - 0.25) * 0.366) (0.5 * sqrt 3 * (n + 0.5) * l)
     bottomRight = Point ((1.5 * m - 0.25) * 0.556) (-0.5 * sqrt 3 * (n + 0.5) * l)
     frame = mkLayer "frame" [mkRectangle topLeft bottomRight]

@@ -5,6 +5,7 @@ module Shape
     , Transformable 
     , translate
     , translateP
+    , translatePoints
     , rotate
     , mirror
     , offset
@@ -32,6 +33,9 @@ class Transformable s where
     
     -- | Move a shape in space adding the given point to the X and Y axes.
     translateP :: Point -> s -> s
+
+    translatePoints :: [Point] -> s -> [s]
+    translatePoints ps s = map (\p -> translateP p s) ps
     
     -- | Rotate a shape about a line through point p along vector t
     rotate     :: Point -> Float -> s -> s

@@ -19,10 +19,9 @@ getScene :: IO Scene
 getScene = pure $ mkSceneWithStyle 5 5 sceneStyle [layer1, layer2]
   where
     circle      = Circle (Point 0 0) 1
-    circleList  = [ circle
-                  , translateP (Point 1 0) circle
-                  , translateP (Point (-1) 0) circle] 
-    circles     = Group circleList
+    circles     = Group [ circle
+                        , translateP (Point 1 0) circle
+                        , translateP (Point (-1) 0) circle] 
     moreCircles = rotate (Point 0 0) (-1.55) circles
     allCircles  = optimizeGroup (circles <> moreCircles) 0.01
     layer1      = toLayer "circles" allCircles

@@ -14,6 +14,7 @@ import Text.Printf (printf)
 
 import ApproxEq
 import Layer (Layer, mkLayer)
+import Point (Point)
 import qualified Shape as S
 import Style
 
@@ -56,11 +57,19 @@ toLayer name (Group shapes) = mkLayer name shapes
 size :: Group a -> Int
 size (Group as) = length as
 
+-- | Clone a shape over a series of points, returning a group of the translated objects.
+translateOverPoints :: (S.Transformable s) => [Point] -> s -> Group s
+translateOverPoints ps s = Group $ fmap (\p -> S.translateP p s) ps
+
+-- | Clone a shape over a series of points, returning a group of the translated objects.
+translateGroupOverPoints :: (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => [Point] -> Group a -> Group a
+translateGroupOverPoints ps (Group shapes) = mconcat $ map (\shape -> translateOverPoints ps shape) shapes
+
+
 -- | Remove any duplicate shapes from this group
 deduplicate :: (Ord t, ApproxEq t) => Group t -> Group t
 deduplicate (Group grp) = Group (nub grp)
     where nub = map head . groupBy (=~) . sort
-
 
 transformAndAppend :: (Show a, S.SvgShape a, S.Transformable a, S.Mergable a) => (a -> a) -> Group a -> Group a
 transformAndAppend fn (Group grp) = Group (grp <> newShapes)
@@ -84,7 +93,6 @@ optimizeGroupAndLog group epsilon = hPutStrLn stderr mssg >> return optGrp
 -- with the name of the group.
 toSvgN :: (S.SvgShape s) => Group s -> Svg
 toSvgN (Group grp)  = g $ mapM_ S.toSvg grp
-
 
 -- | Wrap a group of shapes into an SVG <g> element, including a comment
 -- with the name of the group. Apply the given styles to the group.

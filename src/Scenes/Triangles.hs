@@ -4,7 +4,7 @@ module Scenes.Triangles (getScene) where
 import qualified Group as G
 import Layer (mkLayer, style)
 import Line (pattern Line)
-import Point (pattern Point, fromFloat)
+import Point (pattern Point, cartesianProduct, fromFloat)
 import Rectangle (mkRectangle)
 import Scene (Scene, pattern Scene)
 import Shape (toSvg, mirror, rotate)
@@ -36,10 +36,9 @@ getScene = do
     g1 = mconcat $ map (\t -> rotate (Point 0 0) t g0) ts
     g2 = mirror p0 (p1 - p2) g1
     g3 = mirror (Point 0.5 0) (Point 0 1) (g1 <> g2)
-    th = map (\x -> (x - n / 2 + 0.25) * l * sqrt 3) [0..n - 1]
-    tm = map (\x -> (x - n / 2 + 0.25) * l * 3) [0..m - 1]
-    pts = Point <$> tm <*> th
-    final = G.translateGroupOverPoints pts g3
+    xs = map (\x -> (x - n / 2 + 0.25) * l * 3) [0..m - 1]
+    ys = map (\x -> (x - n / 2 + 0.25) * l * sqrt 3) [0..n - 1]
+    final = G.translateGroupOverPoints (cartesianProduct xs ys) g3
     topLeft = Point ((-1.5 * m - 0.25) * 0.366) (0.5 * sqrt 3 * (n + 0.5) * l)
     bottomRight = Point ((1.5 * m - 0.25) * 0.556) (-0.5 * sqrt 3 * (n + 0.5) * l)
     frame = mkLayer "frame" [mkRectangle topLeft bottomRight]

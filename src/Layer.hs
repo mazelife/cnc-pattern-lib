@@ -47,10 +47,10 @@ instance S.SvgShape ShapeLike where
     toSvg (MkShape a) = S.toSvg a
 
 instance S.Transformable ShapeLike where
-    translate p (MkShape a)               = pack $ S.translate p a
-    rotate p v (MkShape a)                = pack $ S.rotate p v a
-    mirror p v (MkShape a)                = pack $ S.mirror p v a
-    offset d leftSide (MkShape a)         = pack $ S.offset d leftSide a
+    translate p (MkShape a)       = pack $ S.translate p a
+    rotate p v (MkShape a)        = pack $ S.rotate p v a
+    mirror p v (MkShape a)        = pack $ S.mirror p v a
+    offset d leftSide (MkShape a) = pack $ S.offset d leftSide a
 
 instance S.SvgShape [ShapeLike] where
     toSvg layer = g $ mapM_ S.toSvg layer

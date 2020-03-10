@@ -255,7 +255,13 @@ pattern StyleAttrs :: () => Maybe String -> Maybe Float -> Maybe String -> Style
 strokeColor :: StyleAttrs -> Maybe String
 strokeWidth :: StyleAttrs -> Maybe Float
 fillColor :: StyleAttrs -> Maybe String
+
+-- | Shortcut constructor for a StyleAttrs instance wherre just stroke
+--   color is set.
 withStrokeColor :: String -> StyleAttrs
+
+-- | Shortcut constructor for an "empty" StyleAttrs instance (i.e. no
+--   styles are specified)
 defaultStyleAttrs :: StyleAttrs
 getAttrs :: StyleAttrs -> [Attribute]
 applyStyle :: StyleAttrs -> Svg -> Svg

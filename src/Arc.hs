@@ -1,11 +1,16 @@
 module Arc 
     ( Arc
     , pattern Arc
+    , center
+    , radius
+    , start
+    , end
     , svgPathDefinition
     , Arc.asTuple
     , midpoint    
     , arcLength
-    , invert ) where
+    , invert
+    , arcCoords ) where
 
 import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
@@ -57,12 +62,12 @@ instance Transformable Arc where
     translate v (Arc c r th1 th2) = let newC = c + v in 
         Arc newC r th1 th2
 
-    rotate p t (Arc c r th1 th2) = let newC = P.rotate c p t in 
+    rotate p t (Arc c r th1 th2) = let newC = P.rotateP c p t in 
         Arc newC r (th1 + t) (th2 + t)
 
     mirror p v (Arc c r th1 th2) = Arc newC r (2 * vth - th2) (2 * vth - th1)
       where
-        newC = P.mirror c p v
+        newC = P.mirrorP c p v
         vth  = P.angleBetween (Point 1 0) v
 
     offset (Point x _) leftSide (Arc c r th1 th2) = Arc c (r + e) th1 th2
@@ -94,11 +99,19 @@ arcLength (Arc _ r th1 th2) = r * (th2 - th1)
 
 -- | Reflect a point p about the arc at point b.
 invert :: Arc -> Point -> Point -> Point
-invert (Arc c _ _ _) p b = P.mirror p b t
+invert (Arc c _ _ _) p b = P.mirrorP p b t
   where
     Point rx ry = b - c
     t           = Point (-ry) rx
 
 
+-- | Get coordinats at the start and end of a given arc.
+arcCoords :: Arc -> (P.Point, P.Point)
+arcCoords (Arc (P.Point cx cy) r s e) = (P.Point sx sy, P.Point ex ey)
+  where 
+    sx = cx + r * cos s
+    sy = cy + r * sin s
+    ex = cx + r * cos e
+    ey = cy + r * sin e
 
 

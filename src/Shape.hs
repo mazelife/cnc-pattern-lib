@@ -27,12 +27,11 @@ class SvgShape s where
 
 -- | Typeclass for shapes that have transformation operations in cartesian space
 class Transformable s where
-    -- | Move a shape in space adding the given scalar to the X and Y axes.
-    --translate  :: Float -> s -> s
-    
+
     -- | Move a shape in space adding the given point to the X and Y axes.
     translate :: Point -> s -> s
 
+    -- | Duplicate a shape in spcae across a list of points.
     translatePoints :: [Point] -> s -> [s]
     translatePoints ps s = map (\p -> translate p s) ps
     

@@ -5,7 +5,7 @@ module Point
     , yVal
     , fromFloat
     , pointMap
-    , asTuple
+    , pointAsTuple
     -- * Operators for doing arithmetic on a point with a scalar float value
     , (|+|)
     , (|*|)
@@ -16,8 +16,8 @@ module Point
     , angleBetween
     , mag
     , magSquared
-    , mirror
-    , rotate
+    , mirrorP
+    , rotateP
     , cartesianProduct
     ) where
 
@@ -64,8 +64,8 @@ instance ApproxEq Point where
         dx < epsilon && dy < epsilon
 
 instance Ord Point where
-    compare a b = asTuple a `compare` asTuple b
-    (<=) a b = asTuple a <= asTuple b
+    compare a b = pointAsTuple a `compare` pointAsTuple b
+    (<=) a b = pointAsTuple a <= pointAsTuple b
 
 -- | Extract the x axis value from a point
 xVal :: Point -> Float
@@ -84,8 +84,8 @@ pointMap :: (Float -> Float) -> Point -> Point
 pointMap f (Point x y) = Point (f x) (f y)
 
 -- | Convert a point to a 2-tuple representation.
-asTuple :: Point -> (Float, Float)
-asTuple (Point x y) = (x, y)
+pointAsTuple :: Point -> (Float, Float)
+pointAsTuple (Point x y) = (x, y)
 
 -- | Add a scalar value to a point:
 --
@@ -126,13 +126,13 @@ magSquared :: Point -> Float
 magSquared p = dot p p
 
 -- | Mirror point a about a line through point p along vector v
-mirror :: Point -> Point -> Point -> Point
-mirror a p v = (-a) + 2 * p + 2 * w |*| dot (a - p) w 
+mirrorP :: Point -> Point -> Point -> Point
+mirrorP a p v = (-a) + 2 * p + 2 * w |*| dot (a - p) w 
     where w = v |/| mag v
 
 -- | Rotate point a about a line through point p along vector t
-rotate :: Point -> Point -> Float -> Point
-rotate a p t = p + Point (ax * cos t - ay * sin t) (ax * sin t + ay * cos t)
+rotateP :: Point -> Point -> Float -> Point
+rotateP a p t = p + Point (ax * cos t - ay * sin t) (ax * sin t + ay * cos t)
     where
         Point ax ay = a - p
 

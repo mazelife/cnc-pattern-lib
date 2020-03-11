@@ -1,10 +1,10 @@
 module Scenes.Resch (getScene, vectorToFloats) where
 
 import Numeric.LinearAlgebra (vector)
-import Numeric.LinearAlgebra.Data (Vector, R, toList)
 
 import qualified Group as G
 import Group (pattern Group, optimizeGroup)
+import Helpers (vectorToFloats)
 import Layer (mkLayer)
 import Line (pattern Line)
 import Point (pattern Point, cartesianProduct, fromFloat)
@@ -14,8 +14,7 @@ import Shape (mirror, rotate)
 import Style 
 
 
-vectorToFloats :: Vector R -> [Float]
-vectorToFloats = map realToFrac . toList
+
 
 getScene :: IO Scene
 getScene = do

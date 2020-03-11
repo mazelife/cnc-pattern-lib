@@ -23,17 +23,17 @@ You can check that everything works as expected by running ``stack test``, which
 This will compile the code, build an executable, and copy the generated executable to your local bin path (e.g. ``~/.local/bin`` on OS X). The ``cnc-pattenr-lib`` executable is self-documenting through its ``--help`` flag::
 
 
-	$> cnc-pattern-lib --help
-	cnc-pattern-lib - a program to render SVG files for CNC routers
+	$> cnc-pattern-lib - a program to render SVG files for CNC routers
 
 	Usage: cnc-pattern-lib SCENE [--preview]
-	  Render a scene as an SVG file.
+	Render a scene as an SVG file.
 
 	Available options:
-	  SCENE                    Name of scene to render. One of: huffman-tower, resch, simple
-	  --preview                Show SVG in preview window.
-	  -h,--help                Show this help text
-
+	SCENE                    Name of scene to render. One of: hexagons,
+							hoberman-cylinder, huffman-tower, resch, simple,
+							triangles
+	--preview                Show SVG in preview window.
+	-h,--help                Show this help text
 
 We can render one of the available scenes (i.e. SVG files) thusly::
 
@@ -73,6 +73,15 @@ You define a circle thusly::
 	someCircle = Circle (Point 0 0) 3.5
 
 This will create a circle with a center point at 0,0 in your scene with a radius of 3.5.
+
+Hexagon
+^^^^^^^
+
+You define a hexagon thusly::
+		
+	someHex = Hexagon (Point 0 0) 3.5
+
+This will create a circle with a center point at 0,0 in your scene with a "radius" (line from center to the edge at a 0-degree angle) of 3.5.
 
 
 Line

@@ -16,6 +16,7 @@ import System.Exit (die)
 
 import Scene (Scene)
 
+import qualified Scenes.Hexagons as HX (getScene)
 import qualified Scenes.HobermanCylinder as H (getScene)
 import qualified Scenes.HuffmanTower as HT (getScene)
 import qualified Scenes.Resch as R (getScene)
@@ -25,7 +26,8 @@ import qualified Scenes.Triangles as TR (getScene)
 -- | Register scenes and their CLI lable here.
 scenes :: Map.Map String (IO Scene)
 scenes = Map.fromList 
-    [ ("hoberman-cylinder", H.getScene)
+    [ ("hexagons", HX.getScene)
+    , ("hoberman-cylinder", H.getScene)
     , ("huffman-tower", HT.getScene)
     , ("resch", R.getScene)
     , ("simple", S.getScene)

@@ -1,3 +1,4 @@
+{-| A type representing a line. -}
 module Line
     ( Line
     , pattern Line
@@ -41,14 +42,13 @@ instance ApproxEq Line where
 
 instance Transformable Line where
     translate p l       = Line (start l + p) (end l + p)
-    rotate p t l        = Line (P.rotate (start l) p t) (P.rotate (end l) p t)
-    mirror p v l        = Line (P.mirror (start l) p v) (P.mirror (end l) p v)
+    rotate p t l        = Line (P.rotateP (start l) p t) (P.rotateP (end l) p t)
+    mirror p v l        = Line (P.mirrorP (start l) p v) (P.mirrorP (end l) p v)
     offset d leftSide l = Line (start l + d * r) (end l + d * r)
         where 
             n = end l - start l
             angle = if leftSide then pi / 2 else (-pi) / 2
-            q :: P.Point
-            q = P.rotate n (P.Point 0 0) angle
+            q = P.rotateP n (P.Point 0 0) angle
             r = q |/| P.mag q
 
 

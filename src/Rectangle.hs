@@ -48,10 +48,10 @@ instance Transformable Rectangle where
     rotate (P.Point px py) t rect = mapPoints (untransform . rotate_ . transform) rect
       where 
         transform (P.Point a b) = P.Point (a - px) (b - py)
-        rotate_ p               = P.rotate p (P.Point 0 0) t
+        rotate_ p               = P.rotateP p (P.Point 0 0) t
         untransform (P.Point a b)     = P.Point (a + px) (b + py)
 
-    mirror p v rect               = mapPoints (\r -> P.mirror r p v) rect
+    mirror p v rect               = mapPoints (\r -> P.mirrorP r p v) rect
 
     offset p leftSide (Rectangle tl tr br bl) = Rectangle a b c d
       where  

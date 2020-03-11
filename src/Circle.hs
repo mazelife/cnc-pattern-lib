@@ -1,3 +1,4 @@
+{-| A type representing a circle. -}
 module Circle where
 
 import Text.Blaze.Svg11 ((!))
@@ -30,9 +31,9 @@ instance Transformable Circle where
 
     translate p c = Circle{center=center c + p, radius=radius c}
 
-    rotate p t c = Circle{center=P.rotate (center c) p t, radius=radius c}
+    rotate p t c = Circle{center=P.rotateP (center c) p t, radius=radius c}
 
-    mirror p v c = Circle{center=P.mirror (center c) p v, radius=radius c}
+    mirror p v c = Circle{center=P.mirrorP (center c) p v, radius=radius c}
 
     offset d leftSide c = Circle{center=center c, radius=radius c + e}
         where e = if leftSide then P.xVal d * (-1) else P.xVal d
@@ -43,16 +44,27 @@ instance Mergable Circle where
 
 
 instance Ord Circle where
-    compare a b = asTuple a `compare` asTuple b
-    (<=) a b = asTuple a <= asTuple b
+    compare a b = circleAsTuple a `compare` circleAsTuple b
+    (<=) a b = circleAsTuple a <= circleAsTuple b
 
 -- Short-form constructor for a circle.
 mkCircle :: Float -> Float -> Float -> Circle
 mkCircle a b = Circle (P.Point a b)
 
 -- | Convert a circle to a 2-tuple representation.
-asTuple :: Circle -> ((Float, Float), Float)
-asTuple (Circle c r) = (P.asTuple c, r)
+circleAsTuple :: Circle -> ((Float, Float), Float)
+circleAsTuple (Circle c r) = (P.pointAsTuple c, r)
 
+-- | Caclulate the circumfrence of a circle.
 circumference :: Circle -> Float
 circumference c = 2 * pi * radius c
+
+-- | Get coordinate on the circumfrance of a circle at the given angle (radians)
+circleCoords :: Circle -> Float -> P.Point
+circleCoords (Circle (P.Point cx cy) r) angle = P.Point x y
+  where 
+    x = cx + r * cos angle
+    y = cy + r * sin angle
+
+
+

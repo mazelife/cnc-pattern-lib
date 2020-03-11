@@ -34,7 +34,7 @@ dependencies:
 ghc-options:
 - -Wall
 - -fwarn-tabs
-- -Werror
+#- -Werror
 - -funbox-strict-fields
 
 

@@ -34,6 +34,15 @@ roundToStr :: (PrintfArg a, Floating a) => Int -> a -> String
 fta :: Float -> AttributeValue
 applyAttrs :: [Attribute] -> Svg -> Svg
 
+-- | Convert from radians to degrees.
+degToRad :: Float -> Float
+
+-- | Convert from degrees to radians.
+radToDeg :: Float -> Float
+
+-- | <a>Hmatrix vectors</a> use doubles, not floats
+vectorToFloats :: Vector R -> [Float]
+
 module Point
 
 -- | A point in 2-d space:
@@ -57,7 +66,7 @@ fromFloat :: Float -> Point
 pointMap :: (Float -> Float) -> Point -> Point
 
 -- | Convert a point to a 2-tuple representation.
-asTuple :: Point -> (Float, Float)
+pointAsTuple :: Point -> (Float, Float)
 
 -- | Add a scalar value to a point:
 --   
@@ -89,10 +98,10 @@ mag :: Point -> Float
 magSquared :: Point -> Float
 
 -- | Mirror point a about a line through point p along vector v
-mirror :: Point -> Point -> Point -> Point
+mirrorP :: Point -> Point -> Point -> Point
 
 -- | Rotate point a about a line through point p along vector t
-rotate :: Point -> Point -> Float -> Point
+rotateP :: Point -> Point -> Float -> Point
 
 -- | Return the cartesian product of a set of coordinates on the X axis and
 --   a set of coordinates on the Y axis as a series of points.
@@ -119,11 +128,10 @@ toSvg :: SvgShape s => s -> Svg
 --   space
 class Transformable s
 
--- | Move a shape in space adding the given scalar to the X and Y axes.
---   translate :: Float -&gt; s -&gt; s
---   
---   Move a shape in space adding the given point to the X and Y axes.
+-- | Move a shape in space adding the given point to the X and Y axes.
 translate :: Transformable s => Point -> s -> s
+
+-- | Duplicate a shape in spcae across a list of points.
 translatePoints :: Transformable s => [Point] -> s -> [s]
 
 -- | Rotate a shape about a line through point p by t radians
@@ -141,6 +149,8 @@ merge :: Mergable s => s -> s -> Float -> Maybe s
 -- | Merge all shapes in a given list that can be merged
 optimize :: Mergable s => [s] -> Float -> [s]
 
+
+-- | A type representing a line.
 module Line
 data Line
 pattern Line :: () => Point -> Point -> Line
@@ -206,6 +216,27 @@ instance ApproxEq.ApproxEq Rectangle.Rectangle
 instance Shape.Transformable Rectangle.Rectangle
 instance Shape.Mergable Rectangle.Rectangle
 
+
+-- | A type representing a hexagon.
+module Hexagon
+data Hexagon
+Hexagon :: Point -> !Float -> Hexagon
+[center] :: Hexagon -> Point
+[radius] :: Hexagon -> !Float
+asLines :: Hexagon -> [Line]
+
+-- | Convert a circle to a 2-tuple representation.
+hexagonAsTuple :: Hexagon -> ((Float, Float), Float)
+instance GHC.Show.Show Hexagon.Hexagon
+instance GHC.Classes.Eq Hexagon.Hexagon
+instance ApproxEq.ApproxEq Hexagon.Hexagon
+instance Shape.Mergable Hexagon.Hexagon
+instance GHC.Classes.Ord Hexagon.Hexagon
+instance Shape.SvgShape Hexagon.Hexagon
+instance Shape.Transformable Hexagon.Hexagon
+
+
+-- | A type representing a circle.
 module Circle
 data Circle
 Circle :: Point -> !Float -> Circle
@@ -214,8 +245,14 @@ Circle :: Point -> !Float -> Circle
 mkCircle :: Float -> Float -> Float -> Circle
 
 -- | Convert a circle to a 2-tuple representation.
-asTuple :: Circle -> ((Float, Float), Float)
+circleAsTuple :: Circle -> ((Float, Float), Float)
+
+-- | Caclulate the circumfrence of a circle.
 circumference :: Circle -> Float
+
+-- | Get coordinate on the circumfrance of a circle at the given angle
+--   (radians)
+circleCoords :: Circle -> Float -> Point
 instance GHC.Show.Show Circle.Circle
 instance GHC.Classes.Eq Circle.Circle
 instance Shape.SvgShape Circle.Circle
@@ -230,6 +267,10 @@ module Arc
 --   that angles must be in (-pi, pi)
 data Arc
 pattern Arc :: () => Point -> !Float -> !Float -> !Float -> Arc
+center :: Arc -> Point
+radius :: Arc -> Float
+start :: Arc -> Float
+end :: Arc -> Float
 
 -- | Calculate the SVG path defition for an Arc
 svgPathDefinition :: Arc -> String
@@ -241,6 +282,9 @@ arcLength :: Arc -> Float
 
 -- | Reflect a point p about the arc at point b.
 invert :: Arc -> Point -> Point -> Point
+
+-- | Get coordinats at the start and end of a given arc.
+arcCoords :: Arc -> (Point, Point)
 instance GHC.Show.Show Arc.Arc
 instance GHC.Classes.Eq Arc.Arc
 instance Shape.SvgShape Arc.Arc
@@ -368,6 +412,9 @@ Group :: [shape] -> Group shape
 -- | Convert a group to a layer.
 toLayer :: (Show a, SvgShape a, Transformable a) => String -> Group a -> Layer
 
+-- | Convert a group to a list of shapes.
+toList :: (Show a, SvgShape a, Transformable a) => Group a -> [a]
+
 -- | Number of shapes in the group.
 size :: Group a -> Int
 
@@ -414,12 +461,17 @@ getScene :: IO Scene
 
 module Scenes.Resch
 getScene :: IO Scene
+
+-- | <a>Hmatrix vectors</a> use doubles, not floats
 vectorToFloats :: Vector R -> [Float]
 
 module Scenes.HuffmanTower
 getScene :: IO Scene
 
 module Scenes.HobermanCylinder
+getScene :: IO Scene
+
+module Scenes.Hexagons
 getScene :: IO Scene
 
 

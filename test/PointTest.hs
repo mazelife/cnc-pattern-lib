@@ -43,9 +43,9 @@ pointGeometryTest = let ?epsilon = 0.001 in testGroup "Test geometric calculatio
   , testCase "Mag-squared function" $
       magSquared b @?= 13.0
   , testCase "Mirror point function" $
-      mirror a b c @?= Point 1 1
+      mirrorP a b c @?= Point 1 1
   , testCase "Rotate point function" $
-      let Point rx ry = rotate a b 3 in (rx @~? 3.272232) >> (ry @~? 4.838864)
+      let Point rx ry = rotateP a b 3 in (rx @~? 3.272232) >> (ry @~? 4.838864)
   , testCase "Point approximate equality" $
       (approxEqual a b 0.1 @?= False) >>
       (approxEqual a a 0.1 @?= True) >>

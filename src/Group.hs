@@ -52,6 +52,10 @@ instance (S.Transformable a) => S.Transformable (Group a) where
 toLayer :: (Show a, S.SvgShape a, S.Transformable a) => String -> Group a -> Layer
 toLayer name (Group shapes) = mkLayer name shapes
 
+-- | Convert a group to a list of shapes.
+toList :: (Show a, S.SvgShape a, S.Transformable a) => Group a -> [a]
+toList (Group shapes) = shapes
+
 -- | Number of shapes in the group.
 size :: Group a -> Int
 size (Group as) = length as

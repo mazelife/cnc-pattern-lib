@@ -46,8 +46,8 @@ asLines (Hexagon cntr r) = [ Line a b
                            , Line e f
                            , Line f a ]
   where 
-      p = (Point r 0)
-      ln = Line (cntr + p) (cntr - p)
+      p          = Point r 0
+      ln         = Line (cntr + p) (cntr - p)
       (Line b e) = ln
       (Line a d) = rotate cntr (degToRad 60) ln
       (Line f c) = rotate cntr (degToRad 120) ln

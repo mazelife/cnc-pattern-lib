@@ -47,18 +47,18 @@ getScene = pure $ mkSceneWithStyle 7 5 sceneStyle [hexLayer, arcLayer, lineLayer
       alignedHexes = alignedGroup hexes
       hexLayer = (toLayer "hexagon" (hexes <> offsetHexes <> alignedHexes)) {style=Just $ withStrokeColor orange}
 
-      leftArcs = duplicate $ Arc (Point 0 0) (r * 1.15) (degToRad (90)) (degToRad 180) -- <> 
+      leftArcs = duplicate $ Arc (Point 0 0) (r * 1.15) (degToRad 90) (degToRad 180) -- <> 
       leftOffsetArcs = offsetGroup leftArcs
       leftAlignedArcs = alignedGroup leftArcs
       
-      rightArcs = duplicate $  Arc (Point 0 0) (r * 1.2) (degToRad (270)) (degToRad 0)
+      rightArcs = duplicate $  Arc (Point 0 0) (r * 1.2) (degToRad 270) (degToRad 0)
       rightOffsetArcs = offsetGroup rightArcs
       rightAlignedArcs = alignedGroup rightArcs
 
       arcLayer = (toLayer "arcs" 
         (leftArcs <> leftOffsetArcs <> leftAlignedArcs <> rightArcs <> rightOffsetArcs <> rightAlignedArcs)) {style=Just $ withStrokeColor teal}
 
-      connectingLines = Group $ map connectEndpoints (zip (toList rightArcs) (tail (toList leftArcs)))
+      connectingLines = Group $ zipWith (curry connectEndpoints) (toList rightArcs) (tail (toList leftArcs))
       offsetLines = translate (Point (-0.01) 0) $ offsetGroup connectingLines
       alignedLines = alignedGroup connectingLines
       lineLayer = (toLayer "lines" (connectingLines <> offsetLines <> alignedLines)) {style=Just $ withStrokeColor teal}

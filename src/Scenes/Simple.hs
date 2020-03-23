@@ -1,3 +1,8 @@
+{-| 
+-- The simple scene documented in the README.
+-- Provides a worked example of all the basic concepts in this library.
+ -}
+
 module Scenes.Simple (getScene) where
 
 import Circle (pattern Circle)
@@ -9,11 +14,6 @@ import Scene (Scene, mkSceneWithStyle)
 import Style (pattern StyleAttrs, strokeColor, strokeWidth, fillColor, withStrokeColor)
 import Shape (rotate, translate)
 
-
------------------------------------------------------------------------------
--- The simple scene documented in the README.
--- Provides a worked example of all the basic concepts in this library.
------------------------------------------------------------------------------
 
 getScene :: IO Scene
 getScene = pure $ mkSceneWithStyle 5 5 sceneStyle [layer1, layer2]

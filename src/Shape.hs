@@ -33,7 +33,7 @@ class Transformable s where
 
     -- | Duplicate a shape in spcae across a list of points.
     translatePoints :: [Point] -> s -> [s]
-    translatePoints ps s = map (\p -> translate p s) ps
+    translatePoints ps s = map (`translate` s) ps
     
     -- | Rotate a shape about a line through point p by t radians
     rotate     :: Point -> Float -> s -> s

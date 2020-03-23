@@ -43,15 +43,15 @@ instance ApproxEq Rectangle where
         all (\f -> approxEqual (f a) (f b) epsilon) fs
 
 instance Transformable Rectangle where
-    translate p rect              = mapPoints (\r -> r + p) rect  
+    translate p              = mapPoints (\r -> r + p)  
 
-    rotate (P.Point px py) t rect = mapPoints (untransform . rotate_ . transform) rect
+    rotate (P.Point px py) t = mapPoints (untransform . rotate_ . transform)
       where 
-        transform (P.Point a b) = P.Point (a - px) (b - py)
-        rotate_ p               = P.rotateP p (P.Point 0 0) t
-        untransform (P.Point a b)     = P.Point (a + px) (b + py)
+        transform (P.Point a b)   = P.Point (a - px) (b - py)
+        rotate_ p                 = P.rotateP p (P.Point 0 0) t
+        untransform (P.Point a b) = P.Point (a + px) (b + py)
 
-    mirror p v rect               = mapPoints (\r -> P.mirrorP r p v) rect
+    mirror p v               = mapPoints (\r -> P.mirrorP r p v)
 
     offset p leftSide (Rectangle tl tr br bl) = Rectangle a b c d
       where  

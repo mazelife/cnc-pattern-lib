@@ -38,7 +38,7 @@ instance Functor Group where
 
 instance Applicative Group where
     pure a = Group [a]
-    (<*>) (Group fn) (Group as) = Group ([f a | (f, a) <- (zip fn as)])
+    (<*>) (Group fn) (Group as) = Group [f a | (f, a) <- zip fn as]
 
 
 -- | Groups can be transformed in the same way single shapes can.
